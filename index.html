@@ -6,72 +6,47 @@
 <title>카드가 건네는 메시지</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:center;background:#1d2671;color:#fff;min-height:100vh;position:relative;overflow-x:hidden}
-.bg-container{position:fixed;top:0;left:0;width:100vw;height:100vh;background:linear-gradient(135deg,#1d2671 0%,#3b2667 50%,#1e1035 100%);z-index:-2;overflow:hidden}
-.aurora{position:absolute;top:-50%;left:-50%;width:200%;height:200%;border-radius:40%;opacity:.6;filter:blur(60px);mix-blend-mode:screen;animation:moveAurora 18s infinite alternate ease-in-out;pointer-events:none}
-.aurora-1{background:radial-gradient(circle at 30% 30%,rgba(255,150,220,.8),rgba(180,100,255,.5),transparent 60%)}
-.aurora-2{background:radial-gradient(circle at 70% 50%,rgba(100,255,210,.8),rgba(80,200,240,.5),transparent 60%);animation-duration:22s;animation-delay:-5s}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#fff,rgba(0,0,0,0)),radial-gradient(2px 2px at 150px 80px,rgba(255,255,255,.9),rgba(0,0,0,0)),radial-gradient(1px 1px at 280px 120px,#fff,rgba(0,0,0,0)),radial-gradient(2.5px 2.5px at 400px 200px,rgba(255,255,255,.8),rgba(0,0,0,0));background-size:500px 500px;opacity:.8;z-index:-1;pointer-events:none}
-@keyframes moveAurora{0%{transform:rotate(0deg) translate(0,0) scale(1)}50%{transform:rotate(15deg) translate(-5%,8%) scale(1.1)}100%{transform:rotate(-10deg) translate(5%,-5%) scale(.95)}}
-.container{position:relative;z-index:1;width:100%;max-width:700px;margin:0 auto;padding:60px 20px}
-#topMenu{transition:opacity .8s ease}
+html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,"Noto Sans KR",sans-serif;text-align:center;color:#333}
+body{position:relative;background:#f8f4ed;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-45%;z-index:-3;pointer-events:none;background:radial-gradient(ellipse 40% 28% at 18% 20%,rgba(255,178,205,.72),transparent 70%),radial-gradient(ellipse 38% 30% at 82% 18%,rgba(205,180,255,.68),transparent 70%),radial-gradient(ellipse 45% 32% at 65% 78%,rgba(169,213,255,.58),transparent 70%),radial-gradient(ellipse 38% 28% at 20% 82%,rgba(255,213,231,.62),transparent 70%);filter:blur(55px);animation:auroraOne 16s ease-in-out infinite alternate}
+body:after{content:"";position:fixed;inset:-35%;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 28% 45% at 48% 12%,rgba(255,220,235,.65),transparent 70%),radial-gradient(ellipse 32% 42% at 78% 58%,rgba(193,180,255,.52),transparent 70%),radial-gradient(ellipse 30% 38% at 28% 62%,rgba(175,225,255,.45),transparent 70%);filter:blur(70px);mix-blend-mode:multiply;animation:auroraTwo 22s ease-in-out infinite alternate}
+@keyframes auroraOne{0%{transform:translate(-8%,-5%) rotate(-5deg) scale(1)}25%{transform:translate(3%,4%) rotate(2deg) scale(1.08)}50%{transform:translate(10%,-2%) rotate(6deg) scale(1.02)}75%{transform:translate(-2%,8%) rotate(-2deg) scale(1.1)}100%{transform:translate(-10%,-3%) rotate(4deg) scale(1.04)}}
+@keyframes auroraTwo{0%{transform:translate(7%,5%) rotate(3deg) scale(1.05)}30%{transform:translate(-5%,-6%) rotate(-4deg) scale(1.12)}60%{transform:translate(-10%,5%) rotate(5deg) scale(1)}100%{transform:translate(6%,-4%) rotate(-3deg) scale(1.1)}}
+.container{max-width:800px;margin:0 auto;padding:70px 20px}
 #topMenu.hidden{display:none}
-h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px;text-shadow:0 2px 10px rgba(0,0,0,.3)}
-#notice{margin:-10px 0 30px;font-size:14px;color:rgba(255,255,255,.7);letter-spacing:-.3px}
-#startButton,#messageButton{padding:16px 38px;border:0;border-radius:50px;background:rgba(255,255,255,.9);color:#1e1035;font-size:18px;font-weight:600;cursor:pointer;backdrop-filter:blur(5px);box-shadow:0 4px 15px rgba(0,0,0,.2);transition:transform .2s,background .2s,box-shadow .2s}
-#startButton:hover,#messageButton:hover{background:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,255,255,.3)}
-#startButton:active,#messageButton:active{transform:translateY(0)}
-#startButton:disabled,#messageButton:disabled{background:rgba(255,255,255,.4);color:rgba(255,255,255,.7);cursor:default;transform:none;box-shadow:none}
+#notice{margin:-10px 0 30px;font-size:14px;color:#888;letter-spacing:-.3px}
+button{border:0;border-radius:30px;padding:14px 30px;background:#555;color:#fff;font-size:16px;cursor:pointer;transition:.3s}
+button:hover{background:#333}
+button:disabled{opacity:.5;cursor:default}
 #intro{display:none;min-height:500px;align-items:center;justify-content:center;flex-direction:column}
-#introText{font-size:28px;line-height:1.7;letter-spacing:-.5px;word-break:keep-all;opacity:0;text-shadow:0 2px 8px rgba(0,0,0,.4);transition:opacity .8s ease}
+#introText{font-size:28px;line-height:1.7;letter-spacing:-.5px;word-break:keep-all;opacity:0;transition:opacity .8s ease}
 #introText.show{opacity:1}
 #messageButton{display:none;margin-top:35px;opacity:0;transform:translateY(12px);transition:opacity 1.2s ease,transform 1.2s ease}
 #messageButton.show{opacity:1;transform:translateY(0)}
-#result{margin-top:50px;min-height:500px}
-#countdown{display:none;height:500px;align-items:center;justify-content:center;font-size:90px;font-weight:400;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.6)}
-#countdownNumber{display:block;animation:countdownFade 1s ease}
-@keyframes countdownFade{0%{opacity:0;transform:scale(1.2)}25%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
-#cardResult{display:none;opacity:0;transform:translateY(15px);transition:opacity 1s ease,transform 1s ease}
-#cardResult.show{opacity:1;transform:translateY(0)}
-#cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 30px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.4)}
-#cardText{max-width:600px;margin:0 auto;font-size:20px;line-height:1.8;letter-spacing:-.3px;word-break:keep-all;text-shadow:0 1px 5px rgba(0,0,0,.3)}
-#commentSection{max-width:600px;margin:55px auto 0;padding-top:30px;border-top:1px solid rgba(255,255,255,.2);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity 1.2s ease,transform 1.2s ease}
+#countdown{display:none;min-height:500px;align-items:center;justify-content:center}
+#countdownNumber{font-size:80px;font-weight:300;color:#555}
+@keyframes countdownFade{0%{opacity:0;transform:scale(1.15)}30%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(.98)}100%{opacity:0;transform:scale(.9)}}
+#cardResult{display:none;opacity:0;transition:opacity 1.5s ease}
+#cardResult.show{opacity:1}
+#cardImage{display:block;width:100%;max-width:500px;margin:0 auto 35px;border-radius:10px}
+#cardText{font-size:20px;line-height:1.8;white-space:pre-line;word-break:keep-all}
+#commentSection{max-width:600px;margin:55px auto 0;padding-top:30px;border-top:1px solid rgba(0,0,0,.1);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity 1.2s ease,transform 1.2s ease}
 #commentSection.show{opacity:1;transform:translateY(0);pointer-events:auto}
-#commentToggle{border:0;background:none;color:rgba(255,255,255,.8);font-size:15px;cursor:pointer;padding:8px 15px}
-#commentForm{display:none;margin-top:15px}
-#commentMessage{margin:0 0 20px;font-size:15px;line-height:1.7;color:rgba(255,255,255,.8);word-break:keep-all}
-#commentMessage small{display:block;margin-top:4px;font-size:13px;color:rgba(255,255,255,.6)}
-#commentBox{display:flex;gap:10px;width:100%}
-#commentInput{flex:1;min-width:0;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.3);border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:15px;outline:none;backdrop-filter:blur(5px);transition:border-color .2s,box-shadow .2s}
-#commentInput::placeholder{color:rgba(255,255,255,.5)}
-#commentInput:focus{border-color:rgba(255,255,255,.8);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
-#commentButton{flex-shrink:0;height:48px;padding:0 20px;border:0;border-radius:10px;background:#fff;color:#1e1035;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .2s}
-#commentButton:hover{background:rgba(255,255,255,.9)}
-#commentButton:active{transform:translateY(1px)}
-#commentButton:disabled{background:rgba(255,255,255,.4);color:rgba(255,255,255,.7);cursor:default}
-#savedMessage{display:none;margin-top:15px;font-size:14px;color:rgba(255,255,255,.8)}
+#commentToggle{display:inline-block;background:none;color:#555;padding:5px 10px;font-size:16px}
+#commentForm{display:none;margin-top:25px}
+#commentGuide{font-size:14px;color:#888;line-height:1.7;margin-bottom:15px}
+#commentInput{width:100%;height:110px;padding:15px;border:1px solid #ddd;border-radius:10px;resize:none;font-family:inherit;font-size:14px;background:rgba(255,255,255,.7)}
+#commentSubmit{margin-top:12px}
+#savedMessage{display:none;margin-top:15px;font-size:14px;color:#888}
 @media(max-width:600px){
-.container{padding:40px 15px}
-h1{font-size:28px}
-#notice{font-size:13px}
+.container{padding:50px 18px}
 #introText{font-size:23px}
-#countdown{font-size:70px}
-#cardImage{max-height:420px}
-#cardText{font-size:17px}
-#commentSection{margin-top:45px;padding-top:25px}
-#commentMessage{font-size:14px}
-#commentBox{gap:7px}
-#commentInput{font-size:14px;padding:0 12px}
-#commentButton{padding:0 15px;font-size:14px}
+#cardText{font-size:18px}
+#countdownNumber{font-size:65px}
 }
 </style>
 </head>
 <body>
-<div class="bg-container">
-<div class="aurora aurora-1"></div>
-<div class="aurora aurora-2"></div>
-</div>
-<div class="stars"></div>
 <div class="container">
 <div id="topMenu">
 <h1>카드가 건네는 메시지</h1>
@@ -82,64 +57,50 @@ h1{font-size:28px}
 <div id="introText"></div>
 <button id="messageButton">메시지 받기</button>
 </div>
-<div id="result">
-<div id="countdown"><span id="countdownNumber"></span></div>
+<div id="countdown">
+<div id="countdownNumber"></div>
+</div>
 <div id="cardResult">
 <img id="cardImage" src="" alt="타로 카드">
 <div id="cardText"></div>
 <div id="commentSection">
-<button id="commentToggle" type="button">한마디 남기기</button>
+<button id="commentToggle">한마디 남기기</button>
 <div id="commentForm">
-<p id="commentMessage">도움이 되셨나요?<br>느낀점이나 건의사항이 있으시면 남겨주세요.</p>
-<div id="commentBox">
-<input type="text" id="commentInput" placeholder="댓글은 말랑달콤 타로만 볼 수 있습니다." maxlength="500">
-<button id="commentButton" type="button">등록</button>
-</div>
-<div id="savedMessage">저장되었습니다.</div>
-</div>
+<div id="commentGuide">도움이 되셨나요?<br>느낀점이나 건의사항이 있으시면 남겨주세요.</div>
+<textarea id="commentInput" placeholder="댓글은 말랑달콤 타로만 볼 수 있습니다."></textarea>
+<button id="commentSubmit">등록</button>
+<div id="savedMessage">댓글이 등록되었습니다.</div>
 </div>
 </div>
 </div>
 </div>
 <script>
-const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt",TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt",GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
-let images=[],texts=[];
+const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt";
+const TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
+const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
 const $=id=>document.getElementById(id);
-function convertGoogleDriveUrl(url){
-const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
-return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
+let images=[],texts=[];
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function preloadImage(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=reject;img.src=src})}
+function convertDriveUrl(url){
+const match=url.match(/(?:id=|\/d\/)([a-zA-Z0-9_-]+)/);
+return match?`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`:url
 }
 async function loadData(){
 try{
-const[i,t]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
-if(!i.ok||!t.ok)throw Error("데이터 로딩 실패");
-images=(await i.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(convertGoogleDriveUrl);
-texts=(await t.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-if(images.length!==texts.length)return console.error("이미지와 텍스트 개수가 다릅니다.");
-images.forEach(url=>{const img=new Image();img.src=url});
-}catch(e){console.error("데이터 로딩 오류:",e)}
+const[imageRes,textRes]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
+const[imageData,textData]=await Promise.all([imageRes.text(),textRes.text()]);
+images=imageData.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(convertDriveUrl);
+texts=textData.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)
+}catch(e){console.error(e)}
 }
-function preloadImage(url){
-return new Promise((resolve,reject)=>{
-const img=new Image();
-img.onload=()=>resolve(img);
-img.onerror=reject;
-img.src=url
-})
-}
-function showIntro(message,duration){
-return new Promise(resolve=>{
+async function showIntro(message,duration){
 const text=$("introText");
-text.classList.remove("show");
-setTimeout(()=>{
 text.textContent=message;
-text.classList.add("show");
-setTimeout(()=>{
 text.classList.remove("show");
-setTimeout(resolve,800);
-},duration);
-},800);
-})
+requestAnimationFrame(()=>text.classList.add("show"));
+await wait(duration);
+text.classList.remove("show");
 }
 async function startExperience(){
 $("topMenu").classList.add("hidden");
@@ -191,46 +152,30 @@ $("cardText").textContent=text;
 cardResult.style.display="block";
 requestAnimationFrame(()=>requestAnimationFrame(()=>{
 cardResult.classList.add("show");
-setTimeout(()=>{
-commentSection.classList.add("show");
-},5000);
+setTimeout(()=>commentSection.classList.add("show"),5000);
 }));
 button.disabled=false
 }
-async function submitComment(){
-const input=$("commentInput"),button=$("commentButton"),saved=$("savedMessage"),comment=input.value.trim();
-if(!comment)return input.focus();
-button.disabled=true;
-try{
-await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"comment="+encodeURIComponent(comment)});
-input.value="";
-saved.style.display="block";
-}catch(e){
-console.error("댓글 저장 오류:",e)
-}
-finally{
-button.disabled=false
-}
-}
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 $("startButton").addEventListener("click",startExperience);
 $("messageButton").addEventListener("click",drawCard);
-$("commentButton").addEventListener("click",submitComment);
 $("commentToggle").addEventListener("click",()=>{
-const form=$("commentForm"),button=$("commentToggle");
-if(form.style.display==="block"){
-form.style.display="none";
-button.textContent="한마디 남기기"
-}else{
-form.style.display="block";
-button.textContent="댓글 닫기";
-$("commentInput").focus()
+const form=$("commentForm");
+form.style.display=form.style.display==="block"?"none":"block";
+});
+$("commentSubmit").addEventListener("click",async()=>{
+const input=$("commentInput"),message=input.value.trim();
+if(!message)return;
+const button=$("commentSubmit");
+button.disabled=true;
+try{
+await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({comment:message})});
+input.value="";
+$("savedMessage").style.display="block";
+}catch(e){
+console.error(e)
 }
+button.disabled=false
 });
-$("commentInput").addEventListener("keydown",e=>{
-if(e.key==="Enter")submitComment()
-});
-$("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
 loadData();
 </script>
 </body>
