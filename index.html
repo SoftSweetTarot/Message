@@ -2,10 +2,13 @@
 <html lang="ko">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>타로 랜덤 카드 테스트</title>
+    <title>타로 랜덤 카드</title>
+
 
     <style>
 
@@ -15,32 +18,48 @@
             padding: 50px;
         }
 
+
         button {
             padding: 15px 30px;
             font-size: 20px;
             cursor: pointer;
         }
 
+
         #result {
             margin-top: 40px;
         }
 
-        #cardImage {
-            display: none;
-            max-width: 400px;
-            max-height: 500px;
-            margin: 20px auto;
-        }
-
-        #cardText {
-            font-size: 20px;
-            line-height: 1.6;
-            margin-top: 20px;
-        }
 
         #number {
             font-size: 30px;
             margin-bottom: 20px;
+        }
+
+
+        #cardImage {
+            display: none;
+
+            max-width: 400px;
+            max-height: 500px;
+
+            margin: 20px auto;
+        }
+
+
+        #cardText {
+            font-size: 20px;
+
+            line-height: 1.6;
+
+            margin-top: 20px;
+        }
+
+
+        #errorMessage {
+            color: red;
+
+            margin-top: 20px;
         }
 
     </style>
@@ -50,169 +69,288 @@
 
 <body>
 
+
     <h1>타로 랜덤 카드</h1>
+
 
     <button id="drawButton">
         카드 뽑기
     </button>
 
+
     <div id="result">
+
 
         <div id="number"></div>
 
-        <img id="cardImage" src="" alt="타로 카드">
+
+        <img
+            id="cardImage"
+            src=""
+            alt="타로 카드"
+        >
+
 
         <div id="cardText"></div>
 
+
+        <div id="errorMessage"></div>
+
+
     </div>
+
 
 
 <script>
 
 
-// ========================================
-// GitHub TXT 파일 주소
-// ========================================
+// ==================================================
+// GitHub TXT 주소
+// ==================================================
 
 const IMAGE_DATA_URL =
-    "https://raw.githubusercontent.com/사용자이름/저장소이름/main/images.txt";
+    "https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt";
+
 
 const TEXT_DATA_URL =
-    "https://raw.githubusercontent.com/사용자이름/저장소이름/main/texts.txt";
+    "https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
 
 
-// ========================================
+
+// ==================================================
 // 이미지 / 텍스트 배열
-// ========================================
+// ==================================================
 
 let images = [];
+
 let texts = [];
 
 
-// ========================================
+
+// ==================================================
 // Google Drive 주소를 이미지 주소로 변환
-// ========================================
+// ==================================================
 
 function convertGoogleDriveUrl(url) {
 
     url = url.trim();
 
-    // Google Drive 파일 주소에서 파일 ID 추출
-    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
-    // 파일 ID를 찾았다면
+    // Google Drive 주소에서 파일 ID 찾기
+
+    const match =
+        url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+
+    // 파일 ID를 찾은 경우
+
     if (match) {
 
         const fileId = match[1];
 
-        return `https://lh3.googleusercontent.com/d/${fileId}`;
+
+        // Google Drive 이미지 주소
+
+        return (
+            "https://drive.google.com/thumbnail" +
+            "?id=" +
+            fileId +
+            "&sz=w1000"
+        );
 
     }
 
+
     // Google Drive 주소가 아니면
-    // 원래 주소 그대로 사용
+    // 원래 주소 사용
+
     return url;
 
 }
 
 
-// ========================================
-// TXT 데이터 불러오기
-// ========================================
+
+// ==================================================
+// TXT 파일 불러오기
+// ==================================================
 
 async function loadData() {
 
     try {
 
-        const [imageResponse, textResponse] =
-            await Promise.all([
 
-                fetch(IMAGE_DATA_URL),
+        // 이미지와 텍스트를 동시에 가져오기
 
-                fetch(TEXT_DATA_URL)
+        const [
+            imageResponse,
+            textResponse
+        ] = await Promise.all([
 
-            ]);
+            fetch(IMAGE_DATA_URL),
+
+            fetch(TEXT_DATA_URL)
+
+        ]);
 
 
-        // TXT → 문자열
+
+        // HTTP 오류 확인
+
+        if (!imageResponse.ok) {
+
+            throw new Error(
+                "images.txt를 불러오지 못했습니다."
+            );
+
+        }
+
+
+        if (!textResponse.ok) {
+
+            throw new Error(
+                "texts.txt를 불러오지 못했습니다."
+            );
+
+        }
+
+
+
+        // TXT 내용 가져오기
 
         const imageData =
             await imageResponse.text();
+
 
         const textData =
             await textResponse.text();
 
 
-        // ========================================
-        // 이미지 배열 만들기
-        // ========================================
+
+        // ==================================================
+        // 이미지 배열
+        // ==================================================
 
         images = imageData
+
             .split(/\r?\n/)
+
             .map(line => line.trim())
+
             .filter(line => line !== "")
-            .map(line => convertGoogleDriveUrl(line));
+
+            .map(line =>
+                convertGoogleDriveUrl(line)
+            );
 
 
-        // ========================================
-        // 텍스트 배열 만들기
-        // ========================================
+
+        // ==================================================
+        // 텍스트 배열
+        // ==================================================
 
         texts = textData
+
             .split(/\r?\n/)
+
             .map(line => line.trim())
+
             .filter(line => line !== "");
 
 
-        // ========================================
+
+        // ==================================================
         // 데이터 확인
-        // ========================================
+        // ==================================================
 
-        console.log("이미지 개수:", images.length);
-
-        console.log("텍스트 개수:", texts.length);
-
-        console.log("변환된 이미지 주소:", images);
-
-        console.log("텍스트 배열:", texts);
+        console.log(
+            "이미지 개수:",
+            images.length
+        );
 
 
-        // ========================================
+        console.log(
+            "텍스트 개수:",
+            texts.length
+        );
+
+
+        console.log(
+            "이미지 배열:",
+            images
+        );
+
+
+        console.log(
+            "텍스트 배열:",
+            texts
+        );
+
+
+
+        // ==================================================
         // 이미지와 텍스트 개수 확인
-        // ========================================
+        // ==================================================
 
         if (images.length !== texts.length) {
 
-            console.error(
-                "이미지와 텍스트의 개수가 일치하지 않습니다."
+            throw new Error(
+
+                "이미지와 텍스트의 개수가 다릅니다. " +
+
+                "이미지: " +
+                images.length +
+                "개 / " +
+
+                "텍스트: " +
+                texts.length +
+                "개"
+
             );
 
         }
 
+
+
+        console.log(
+            "카드 데이터 로딩 완료!"
+        );
+
     }
+
 
     catch (error) {
 
+
         console.error(
-            "데이터를 불러오는 중 오류가 발생했습니다.",
+            "데이터 로딩 오류:",
             error
         );
+
+
+        document.getElementById(
+            "errorMessage"
+        ).textContent =
+            error.message;
 
     }
 
 }
 
 
-// ========================================
+
+// ==================================================
 // 카드 뽑기
-// ========================================
+// ==================================================
 
 function drawCard() {
 
 
     // 데이터가 없는 경우
 
-    if (images.length === 0 || texts.length === 0) {
+    if (
+        images.length === 0 ||
+        texts.length === 0
+    ) {
 
         alert(
             "카드 데이터를 아직 불러오지 못했습니다."
@@ -223,9 +361,10 @@ function drawCard() {
     }
 
 
-    // ========================================
-    // 이미지와 텍스트 개수가 다른 경우
-    // ========================================
+
+    // ==================================================
+    // 이미지와 텍스트 개수 확인
+    // ==================================================
 
     if (images.length !== texts.length) {
 
@@ -238,12 +377,17 @@ function drawCard() {
     }
 
 
-    // ========================================
-    // 배열 크기를 자동으로 파악
-    // ========================================
+
+    // ==================================================
+    // 등록된 카드 개수만큼 랜덤 선택
+    // ==================================================
 
     const randomIndex =
-        Math.floor(Math.random() * images.length);
+
+        Math.floor(
+            Math.random() * images.length
+        );
+
 
 
     console.log(
@@ -252,66 +396,123 @@ function drawCard() {
     );
 
 
-    // ========================================
-    // 같은 배열 번호의 이미지와 텍스트
-    // ========================================
+
+    // ==================================================
+    // 같은 배열 번호의 이미지와 텍스트 가져오기
+    // ==================================================
 
     const selectedImage =
         images[randomIndex];
+
 
     const selectedText =
         texts[randomIndex];
 
 
-    // ========================================
-    // 번호 표시
-    // ========================================
 
-    document.getElementById("number").textContent =
-        "배열 번호 : " + randomIndex;
+    // ==================================================
+    // 배열 번호 표시
+    // ==================================================
+
+    document.getElementById(
+        "number"
+    ).textContent =
+
+        "배열 번호 : " +
+        randomIndex;
 
 
-    // ========================================
+
+    // ==================================================
     // 이미지 표시
-    // ========================================
+    // ==================================================
 
     const cardImage =
-        document.getElementById("cardImage");
+        document.getElementById(
+            "cardImage"
+        );
+
 
     cardImage.src =
         selectedImage;
+
 
     cardImage.style.display =
         "block";
 
 
-    // ========================================
-    // 텍스트 표시
-    // ========================================
 
-    document.getElementById("cardText").textContent =
+    // ==================================================
+    // 텍스트 표시
+    // ==================================================
+
+    document.getElementById(
+        "cardText"
+    ).textContent =
         selectedText;
+
+
+
+    // 에러 메시지 제거
+
+    document.getElementById(
+        "errorMessage"
+    ).textContent = "";
 
 }
 
 
-// ========================================
-// 버튼 클릭
-// ========================================
+
+// ==================================================
+// 이미지 로딩 실패 확인
+// ==================================================
+
+document
+    .getElementById("cardImage")
+    .addEventListener(
+        "error",
+        function() {
+
+            console.error(
+                "이미지 불러오기 실패:",
+                this.src
+            );
+
+
+            document.getElementById(
+                "errorMessage"
+            ).textContent =
+
+                "이미지를 불러오지 못했습니다. " +
+                "Google Drive의 공유 설정을 확인해주세요.";
+
+        }
+    );
+
+
+
+// ==================================================
+// 카드 뽑기 버튼
+// ==================================================
 
 document
     .getElementById("drawButton")
-    .addEventListener("click", drawCard);
+    .addEventListener(
+        "click",
+        drawCard
+    );
 
 
-// ========================================
-// 페이지 시작 → 데이터 불러오기
-// ========================================
+
+// ==================================================
+// 페이지가 열리면 데이터 불러오기
+// ==================================================
 
 loadData();
 
 
 </script>
+
 
 </body>
 
