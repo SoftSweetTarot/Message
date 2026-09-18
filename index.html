@@ -4,194 +4,1093 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>카드가 건네는 메세지</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:center;background:#f7f3ee;color:#333}
-.container{width:100%;max-width:700px;margin:0 auto;padding:60px 20px}
-#topMenu{transition:opacity .8s ease}
-#topMenu.hidden{display:none}
-h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
-#startButton,#messageButton{padding:16px 38px;border:0;border-radius:50px;background:#333;color:#fff;font-size:18px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
-#startButton:hover,#messageButton:hover{background:#555;transform:translateY(-2px)}
-#startButton:active,#messageButton:active{transform:translateY(0)}
-#startButton:disabled,#messageButton:disabled{background:#aaa;cursor:default;transform:none}
-#intro{display:none;min-height:500px;align-items:center;justify-content:center;flex-direction:column}
-#introText{font-size:28px;line-height:1.7;letter-spacing:-.5px;word-break:keep-all;opacity:0;transition:opacity .8s ease}
-#introText.show{opacity:1}
-#messageButton{display:none;margin-top:35px;opacity:0;transform:translateY(12px);transition:opacity 1.2s ease,transform 1.2s ease}
-#messageButton.show{opacity:1;transform:translateY(0)}
-#result{margin-top:50px;min-height:500px}
-#countdown{display:none;height:500px;align-items:center;justify-content:center;font-size:90px;font-weight:400;color:#333}
-#countdownNumber{display:block;animation:countdownFade 1s ease}
-@keyframes countdownFade{0%{opacity:0;transform:scale(1.2)}25%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
-#cardResult{display:none;opacity:0;transform:translateY(15px);transition:opacity 1s ease,transform 1s ease}
-#cardResult.show{opacity:1;transform:translateY(0)}
-#cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 30px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.15)}
-#cardText{max-width:600px;margin:0 auto;font-size:20px;line-height:1.8;letter-spacing:-.3px;word-break:keep-all}
-#commentSection{max-width:600px;margin:55px auto 0;padding-top:30px;border-top:1px solid rgba(0,0,0,.1)}
-#commentToggle{border:0;background:none;color:#555;font-size:15px;cursor:pointer;padding:8px 15px}
-#commentForm{display:none;margin-top:15px}
-#commentMessage{margin:0 0 20px;font-size:15px;line-height:1.7;color:#777;word-break:keep-all}
-#commentMessage small{display:block;margin-top:4px;font-size:13px;color:#999}
-#commentBox{display:flex;gap:10px;width:100%}
-#commentInput{flex:1;min-width:0;height:48px;padding:0 16px;border:1px solid #ddd;border-radius:10px;background:#fff;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
-#commentInput:focus{border-color:#999;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
-#commentButton{flex-shrink:0;height:48px;padding:0 20px;border:0;border-radius:10px;background:#333;color:#fff;font-size:15px;cursor:pointer;transition:background .2s,transform .2s}
-#commentButton:hover{background:#555}
-#commentButton:active{transform:translateY(1px)}
-#commentButton:disabled{background:#aaa;cursor:default}
-#savedMessage{display:none;margin-top:15px;font-size:14px;color:#777}
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    text-align:center;
+    background:#f7f3ee;
+    color:#333
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:0 auto;
+    padding:60px 20px
+}
+
+#topMenu{
+    transition:opacity .8s ease
+}
+
+#topMenu.hidden{
+    display:none
+}
+
+h1{
+    margin:0 0 30px;
+    font-size:36px;
+    font-weight:600;
+    letter-spacing:-1px
+}
+
+#startButton,
+#messageButton{
+    padding:16px 38px;
+    border:0;
+    border-radius:50px;
+    background:#333;
+    color:#fff;
+    font-size:18px;
+    font-weight:500;
+    cursor:pointer;
+    transition:transform .2s,background .2s
+}
+
+#startButton:hover,
+#messageButton:hover{
+    background:#555;
+    transform:translateY(-2px)
+}
+
+#startButton:active,
+#messageButton:active{
+    transform:translateY(0)
+}
+
+#startButton:disabled,
+#messageButton:disabled{
+    background:#aaa;
+    cursor:default;
+    transform:none
+}
+
+#intro{
+    display:none;
+    min-height:500px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column
+}
+
+#introText{
+    font-size:28px;
+    line-height:1.7;
+    letter-spacing:-.5px;
+    word-break:keep-all;
+    opacity:0;
+    transition:opacity .8s ease
+}
+
+#introText.show{
+    opacity:1
+}
+
+#messageButton{
+    display:none;
+    margin-top:35px;
+    opacity:0;
+    transform:translateY(12px);
+    transition:opacity 1.2s ease,transform 1.2s ease
+}
+
+#messageButton.show{
+    opacity:1;
+    transform:translateY(0)
+}
+
+#result{
+    margin-top:50px;
+    min-height:500px
+}
+
+#countdown{
+    display:none;
+    height:500px;
+    align-items:center;
+    justify-content:center;
+    font-size:90px;
+    font-weight:400;
+    color:#333
+}
+
+#countdownNumber{
+    display:block;
+    animation:countdownFade 1s ease
+}
+
+@keyframes countdownFade{
+    0%{
+        opacity:0;
+        transform:scale(1.2)
+    }
+
+    25%{
+        opacity:1;
+        transform:scale(1)
+    }
+
+    70%{
+        opacity:1;
+        transform:scale(1)
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(.95)
+    }
+}
+
+#cardResult{
+    display:none;
+    opacity:0;
+    transform:translateY(15px);
+    transition:opacity 1s ease,transform 1s ease
+}
+
+#cardResult.show{
+    opacity:1;
+    transform:translateY(0)
+}
+
+#cardImage{
+    display:block;
+    width:auto;
+    max-width:100%;
+    max-height:500px;
+    margin:0 auto 30px;
+    border-radius:12px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15)
+}
+
+#cardText{
+    max-width:600px;
+    margin:0 auto;
+    font-size:20px;
+    line-height:1.8;
+    letter-spacing:-.3px;
+    word-break:keep-all
+}
+
+
+/* =========================================
+   댓글 영역
+   처음에는 완전히 접혀 있음
+========================================= */
+
+#commentSection{
+    position:relative;
+    max-width:600px;
+    margin:0 auto;
+    padding-top:0;
+    border-top:1px solid transparent;
+
+    max-height:0;
+    overflow:hidden;
+
+    transition:
+        max-height .8s ease,
+        margin-top .8s ease,
+        padding-top .8s ease,
+        border-top-color .8s ease;
+}
+
+
+/* 밑줄 */
+
+#commentSection::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:1px;
+    background:rgba(0,0,0,.1);
+
+    opacity:0;
+    transform:scaleX(.96);
+    transform-origin:center;
+
+    transition:
+        opacity .8s ease,
+        transform .8s ease
+}
+
+
+/* 5초 후 밑줄 표시 */
+
+#commentSection.line-show{
+    max-height:200px;
+    margin-top:55px;
+    padding-top:30px;
+    border-top-color:transparent
+}
+
+#commentSection.line-show::before{
+    opacity:1;
+    transform:scaleX(1)
+}
+
+
+/* 한마디 남기기 버튼 */
+
+#commentToggle{
+    border:0;
+    background:none;
+    color:#555;
+    font-size:15px;
+    cursor:pointer;
+    padding:8px 15px;
+
+    opacity:0;
+    transform:translateY(8px);
+
+    transition:
+        opacity .9s ease,
+        transform .9s ease,
+        color .2s ease
+}
+
+
+/* 밑줄이 나온 뒤 0.5초 후 이 클래스 추가 */
+
+#commentSection.text-show #commentToggle{
+    opacity:1;
+    transform:translateY(0)
+}
+
+#commentToggle:hover{
+    color:#333
+}
+
+
+/* 댓글 입력 영역 */
+
+#commentForm{
+    display:none;
+    margin-top:15px
+}
+
+#commentMessage{
+    margin:0 0 20px;
+    font-size:15px;
+    line-height:1.7;
+    color:#777;
+    word-break:keep-all
+}
+
+#commentMessage small{
+    display:block;
+    margin-top:4px;
+    font-size:13px;
+    color:#999
+}
+
+#commentBox{
+    display:flex;
+    gap:10px;
+    width:100%
+}
+
+#commentInput{
+    flex:1;
+    min-width:0;
+    height:48px;
+    padding:0 16px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+    font-size:15px;
+    outline:none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s
+}
+
+#commentInput:focus{
+    border-color:#999;
+    box-shadow:0 0 0 3px rgba(0,0,0,.05)
+}
+
+#commentButton{
+    flex-shrink:0;
+    height:48px;
+    padding:0 20px;
+    border:0;
+    border-radius:10px;
+    background:#333;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+
+    transition:
+        background .2s,
+        transform .2s
+}
+
+#commentButton:hover{
+    background:#555
+}
+
+#commentButton:active{
+    transform:translateY(1px)
+}
+
+#commentButton:disabled{
+    background:#aaa;
+    cursor:default
+}
+
+#savedMessage{
+    display:none;
+    margin-top:15px;
+    font-size:14px;
+    color:#777
+}
+
+
+/* =========================================
+   모바일
+========================================= */
+
 @media(max-width:600px){
-.container{padding:40px 15px}
-h1{font-size:28px}
-#introText{font-size:23px}
-#countdown{font-size:70px}
-#cardImage{max-height:420px}
-#cardText{font-size:17px}
-#commentSection{margin-top:45px;padding-top:25px}
-#commentMessage{font-size:14px}
-#commentBox{gap:7px}
-#commentInput{font-size:14px;padding:0 12px}
-#commentButton{padding:0 15px;font-size:14px}
+
+    .container{
+        padding:40px 15px
+    }
+
+    h1{
+        font-size:28px
+    }
+
+    #introText{
+        font-size:23px
+    }
+
+    #countdown{
+        font-size:70px
+    }
+
+    #cardImage{
+        max-height:420px
+    }
+
+    #cardText{
+        font-size:17px
+    }
+
+    #commentSection.line-show{
+        margin-top:45px;
+        padding-top:25px
+    }
+
+    #commentMessage{
+        font-size:14px
+    }
+
+    #commentBox{
+        gap:7px
+    }
+
+    #commentInput{
+        font-size:14px;
+        padding:0 12px
+    }
+
+    #commentButton{
+        padding:0 15px;
+        font-size:14px
+    }
 }
 </style>
 </head>
+
+
 <body>
+
 <div class="container">
-<div id="topMenu"><h1>카드가 건네는 메세지</h1><button id="startButton">시작 하기</button></div>
-<div id="intro"><div id="introText"></div><button id="messageButton">메세지 받기</button></div>
-<div id="result">
-<div id="countdown"><span id="countdownNumber"></span></div>
-<div id="cardResult">
-<img id="cardImage" src="" alt="타로 카드">
-<div id="cardText"></div>
-<div id="commentSection">
-<button id="commentToggle" type="button">한마디 남기기</button>
-<div id="commentForm">
-<p id="commentMessage">도움이 되셨나요?<br>느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.<small>댓글은 말랑달콤타로만 볼 수 있습니다.</small></p>
-<div id="commentBox"><input type="text" id="commentInput" placeholder="느낀점을 남겨주세요" maxlength="500"><button id="commentButton" type="button">등록</button></div>
-<div id="savedMessage">저장되었습니다.</div>
+
+    <div id="topMenu">
+        <h1>카드가 건네는 메세지</h1>
+        <button id="startButton">시작 하기</button>
+    </div>
+
+
+    <div id="intro">
+
+        <div id="introText"></div>
+
+        <button id="messageButton">
+            메세지 받기
+        </button>
+
+    </div>
+
+
+    <div id="result">
+
+        <div id="countdown">
+            <span id="countdownNumber"></span>
+        </div>
+
+
+        <div id="cardResult">
+
+            <img
+                id="cardImage"
+                src=""
+                alt="타로 카드"
+            >
+
+            <div id="cardText"></div>
+
+
+            <div id="commentSection">
+
+                <button
+                    id="commentToggle"
+                    type="button"
+                >
+                    한마디 남기기
+                </button>
+
+
+                <div id="commentForm">
+
+                    <p id="commentMessage">
+                        도움 이 되셨나요?<br>
+                        느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.
+                        <small>
+                            댓글은 말랑달콤타로만 볼 수 있습니다.
+                        </small>
+                    </p>
+
+
+                    <div id="commentBox">
+
+                        <input
+                            type="text"
+                            id="commentInput"
+                            placeholder="느낀점을 남겨주세요"
+                            maxlength="500"
+                        >
+
+                        <button
+                            id="commentButton"
+                            type="button"
+                        >
+                            등록
+                        </button>
+
+                    </div>
+
+
+                    <div id="savedMessage">
+                        저장되었습니다.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-</div>
-</div>
-</div>
-</div>
+
+
 <script>
-const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt",TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt",GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
-let images=[],texts=[];
-const $=id=>document.getElementById(id);
+
+const IMAGE_DATA_URL =
+"https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt";
+
+const TEXT_DATA_URL =
+"https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
+
+const GOOGLE_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
+
+
+let images = [];
+let texts = [];
+
+
+const $ = id => document.getElementById(id);
+
+
+/* =========================================
+   Google Drive 이미지 주소 변환
+========================================= */
 
 function convertGoogleDriveUrl(url){
-const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
-return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
+
+    const m = url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+    return m
+        ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`
+        : url.trim();
 }
+
+
+/* =========================================
+   이미지 / 텍스트 데이터 불러오기
+========================================= */
 
 async function loadData(){
-try{
-const[i,t]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
-if(!i.ok||!t.ok)throw Error("데이터 로딩 실패");
-images=(await i.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(convertGoogleDriveUrl);
-texts=(await t.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-if(images.length!==texts.length)return console.error("이미지와 텍스트 개수가 다릅니다.");
-images.forEach(url=>{const img=new Image();img.src=url});
-}catch(e){console.error("데이터 로딩 오류:",e)}
+
+    try{
+
+        const [i,t] = await Promise.all([
+            fetch(IMAGE_DATA_URL),
+            fetch(TEXT_DATA_URL)
+        ]);
+
+        if(!i.ok || !t.ok){
+            throw Error("데이터 로딩 실패");
+        }
+
+
+        images =
+            (await i.text())
+            .split(/\r?\n/)
+            .map(x => x.trim())
+            .filter(Boolean)
+            .map(convertGoogleDriveUrl);
+
+
+        texts =
+            (await t.text())
+            .split(/\r?\n/)
+            .map(x => x.trim())
+            .filter(Boolean);
+
+
+        if(images.length !== texts.length){
+            return console.error(
+                "이미지와 텍스트 개수가 다릅니다."
+            );
+        }
+
+
+        /* 이미지 미리 불러오기 */
+
+        images.forEach(url => {
+
+            const img = new Image();
+
+            img.src = url;
+
+        });
+
+
+    }catch(e){
+
+        console.error(
+            "데이터 로딩 오류:",
+            e
+        );
+
+    }
+
 }
+
+
+/* =========================================
+   이미지 미리 불러오기
+========================================= */
 
 function preloadImage(url){
-return new Promise((resolve,reject)=>{
-const img=new Image();
-img.onload=()=>resolve(img);
-img.onerror=reject;
-img.src=url
-})
+
+    return new Promise((resolve,reject)=>{
+
+        const img = new Image();
+
+        img.onload = () => resolve(img);
+
+        img.onerror = reject;
+
+        img.src = url;
+
+    });
+
 }
+
+
+/* =========================================
+   인트로 문구
+========================================= */
 
 function showIntro(message,duration){
-return new Promise(resolve=>{
-const text=$("introText");
-text.classList.remove("show");
-setTimeout(()=>{
-text.textContent=message;
-text.classList.add("show");
-setTimeout(()=>{
-text.classList.remove("show");
-setTimeout(resolve,800);
-},duration);
-},800);
-})
+
+    return new Promise(resolve=>{
+
+        const text = $("introText");
+
+        text.classList.remove("show");
+
+
+        setTimeout(()=>{
+
+            text.textContent = message;
+
+            text.classList.add("show");
+
+
+            setTimeout(()=>{
+
+                text.classList.remove("show");
+
+
+                setTimeout(
+                    resolve,
+                    800
+                );
+
+            },duration);
+
+        },800);
+
+    });
+
 }
+
+
+/* =========================================
+   시작
+========================================= */
 
 async function startExperience(){
-$("topMenu").classList.add("hidden");
-$("intro").style.display="flex";
-await showIntro("카드로 알고 싶은 것을, 마음속에 떠올려보세요.",5000);
-const text=$("introText"),button=$("messageButton");
-button.classList.remove("show");
-button.style.display="none";
-setTimeout(()=>{
-text.textContent="준비되셨다면, 버튼을 눌러 메시지를 받아보세요.";
-text.classList.add("show");
-setTimeout(()=>{
-button.style.display="block";
-requestAnimationFrame(()=>requestAnimationFrame(()=>button.classList.add("show")));
-},3000);
-},800);
+
+    $("topMenu").classList.add("hidden");
+
+    $("intro").style.display = "flex";
+
+
+    await showIntro(
+        "카드로 알고 싶은 것을, 마음속에 떠올려보세요.",
+        5000
+    );
+
+
+    const text = $("introText");
+    const button = $("messageButton");
+
+
+    button.classList.remove("show");
+
+    button.style.display = "none";
+
+
+    setTimeout(()=>{
+
+        text.textContent =
+            "준비되셨다면, 버튼을 눌러 메시지를 받아보세요.";
+
+        text.classList.add("show");
+
+
+        setTimeout(()=>{
+
+            button.style.display = "block";
+
+
+            requestAnimationFrame(()=>{
+
+                requestAnimationFrame(()=>{
+
+                    button.classList.add("show");
+
+                });
+
+            });
+
+        },3000);
+
+    },800);
+
 }
+
+
+/* =========================================
+   카드 뽑기
+========================================= */
 
 async function drawCard(){
-if(!images.length||!texts.length||images.length!==texts.length)return;
-const button=$("messageButton"),cardResult=$("cardResult"),input=$("commentInput");
-button.disabled=true;
-cardResult.classList.remove("show");
-cardResult.style.display="none";
-input.value="";
-$("savedMessage").style.display="none";
-const i=Math.floor(Math.random()*images.length),image=images[i],text=texts[i];
-const imagePromise=preloadImage(image);
-const countdown=$("countdown"),number=$("countdownNumber");
-$("intro").style.display="none";
-countdown.style.display="flex";
-for(let n=5;n>=1;n--){
-number.textContent=n;
-number.style.animation="none";
-void number.offsetWidth;
-number.style.animation="countdownFade 1s ease";
-await wait(1000);
+
+    if(
+        !images.length ||
+        !texts.length ||
+        images.length !== texts.length
+    ){
+        return;
+    }
+
+
+    const button = $("messageButton");
+    const cardResult = $("cardResult");
+    const input = $("commentInput");
+    const commentSection = $("commentSection");
+
+
+    button.disabled = true;
+
+
+    cardResult.classList.remove("show");
+
+    cardResult.style.display = "none";
+
+
+    /* 댓글 영역 초기화 */
+
+    commentSection.classList.remove(
+        "line-show",
+        "text-show"
+    );
+
+    commentSection.style.maxHeight = "0";
+
+    $("commentForm").style.display = "none";
+
+    $("commentToggle").textContent =
+        "한마디 남기기";
+
+
+    input.value = "";
+
+    $("savedMessage").style.display =
+        "none";
+
+
+    /* 랜덤 카드 */
+
+    const i =
+        Math.floor(
+            Math.random() * images.length
+        );
+
+    const image = images[i];
+
+    const text = texts[i];
+
+
+    /* 이미지 미리 로딩 */
+
+    const imagePromise =
+        preloadImage(image);
+
+
+    /* 인트로 숨김 */
+
+    $("intro").style.display = "none";
+
+
+    /* 카운트다운 */
+
+    const countdown = $("countdown");
+    const number = $("countdownNumber");
+
+
+    countdown.style.display = "flex";
+
+
+    for(let n = 5; n >= 1; n--){
+
+        number.textContent = n;
+
+        number.style.animation = "none";
+
+        void number.offsetWidth;
+
+        number.style.animation =
+            "countdownFade 1s ease";
+
+
+        await wait(1000);
+
+    }
+
+
+    countdown.style.display = "none";
+
+
+    /* 이미지 로딩 완료 대기 */
+
+    try{
+
+        await imagePromise;
+
+    }catch(e){
+
+        console.error(
+            "이미지를 불러오지 못했습니다.",
+            e
+        );
+
+        button.disabled = false;
+
+        return;
+
+    }
+
+
+    /* 카드 표시 */
+
+    $("cardImage").src = image;
+
+    $("cardText").textContent = text;
+
+
+    cardResult.style.display = "block";
+
+
+    requestAnimationFrame(()=>{
+
+        requestAnimationFrame(()=>{
+
+            cardResult.classList.add("show");
+
+        });
+
+    });
+
+
+    button.disabled = false;
+
+
+    /* =========================================
+       카드가 나타난 후 5초 대기
+    ========================================= */
+
+    await wait(5000);
+
+
+    /*
+       5초 후 밑줄 표시
+    */
+
+    commentSection.classList.add(
+        "line-show"
+    );
+
+
+    /* =========================================
+       밑줄이 나타난 후 0.5초 대기
+    ========================================= */
+
+    await wait(500);
+
+
+    /*
+       0.5초 후
+       "한마디 남기기" 표시
+    */
+
+    commentSection.classList.add(
+        "text-show"
+    );
+
 }
-countdown.style.display="none";
-try{await imagePromise}catch(e){console.error("이미지를 불러오지 못했습니다.",e);button.disabled=false;return}
-$("cardImage").src=image;
-$("cardText").textContent=text;
-cardResult.style.display="block";
-requestAnimationFrame(()=>requestAnimationFrame(()=>cardResult.classList.add("show")));
-button.disabled=false
-}
+
+
+/* =========================================
+   댓글 등록
+========================================= */
 
 async function submitComment(){
-const input=$("commentInput"),button=$("commentButton"),saved=$("savedMessage"),comment=input.value.trim();
-if(!comment)return input.focus();
-button.disabled=true;
-try{
-await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"comment="+encodeURIComponent(comment)});
-input.value="";
-saved.style.display="block";
-}catch(e){console.error("댓글 저장 오류:",e)}
-finally{button.disabled=false}
+
+    const input = $("commentInput");
+    const button = $("commentButton");
+    const saved = $("savedMessage");
+
+    const comment =
+        input.value.trim();
+
+
+    if(!comment){
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+
+    try{
+
+        await fetch(
+            GOOGLE_SCRIPT_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                headers:{
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body:
+                    "comment=" +
+                    encodeURIComponent(comment)
+            }
+        );
+
+
+        input.value = "";
+
+        saved.style.display =
+            "block";
+
+
+    }catch(e){
+
+        console.error(
+            "댓글 저장 오류:",
+            e
+        );
+
+    }finally{
+
+        button.disabled = false;
+
+    }
+
 }
 
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 
-$("startButton").addEventListener("click",startExperience);
-$("messageButton").addEventListener("click",drawCard);
-$("commentButton").addEventListener("click",submitComment);
-$("commentToggle").addEventListener("click",()=>{
-const form=$("commentForm"),button=$("commentToggle");
-if(form.style.display==="block"){form.style.display="none";button.textContent="한마디 남기기"}
-else{form.style.display="block";button.textContent="댓글 닫기";$("commentInput").focus()}
-});
-$("commentInput").addEventListener("keydown",e=>{if(e.key==="Enter")submitComment()});
-$("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
+/* =========================================
+   대기 함수
+========================================= */
+
+function wait(ms){
+
+    return new Promise(
+        r => setTimeout(r,ms)
+    );
+
+}
+
+
+/* =========================================
+   시작 버튼
+========================================= */
+
+$("startButton").addEventListener(
+    "click",
+    startExperience
+);
+
+
+/* =========================================
+   메세지 받기 버튼
+========================================= */
+
+$("messageButton").addEventListener(
+    "click",
+    drawCard
+);
+
+
+/* =========================================
+   댓글 버튼
+========================================= */
+
+$("commentButton").addEventListener(
+    "click",
+    submitComment
+);
+
+
+/* =========================================
+   "한마디 남기기" 펼치기 / 접기
+========================================= */
+
+$("commentToggle").addEventListener(
+    "click",
+    ()=>{
+
+        const form =
+            $("commentForm");
+
+        const button =
+            $("commentToggle");
+
+
+        if(form.style.display === "block"){
+
+            form.style.display =
+                "none";
+
+            button.textContent =
+                "한마디 남기기";
+
+        }else{
+
+            form.style.display =
+                "block";
+
+            button.textContent =
+                "댓글 닫기";
+
+            $("commentInput").focus();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   엔터키로 댓글 등록
+========================================= */
+
+$("commentInput").addEventListener(
+    "keydown",
+    e => {
+
+        if(e.key === "Enter"){
+
+            submitComment();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   이미지 오류 확인
+========================================= */
+
+$("cardImage").addEventListener(
+    "error",
+    e => {
+
+        console.error(
+            "이미지 불러오기 실패:",
+            e.target.src
+        );
+
+    }
+);
+
+
+/* =========================================
+   데이터 로딩 시작
+========================================= */
+
 loadData();
+
 </script>
+
 </body>
 </html>
