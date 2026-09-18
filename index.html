@@ -1,65 +1,278 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>타로 랜덤 카드</title>
 
-
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+
+            font-family:
+                Arial,
+                "Noto Sans KR",
+                sans-serif;
+
             text-align: center;
-            padding: 50px;
+
+            background: #f7f3ee;
+
+            color: #333;
         }
 
 
-        button {
-            padding: 15px 30px;
-            font-size: 20px;
+        /* =========================
+           전체 영역
+        ========================= */
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+
+            margin: 0 auto;
+
+            padding: 60px 20px;
+        }
+
+
+        /* =========================
+           제목
+        ========================= */
+
+        h1 {
+            margin: 0 0 30px;
+
+            font-size: 36px;
+
+            font-weight: 600;
+
+            letter-spacing: -1px;
+        }
+
+
+        /* =========================
+           카드 뽑기 버튼
+        ========================= */
+
+        #drawButton {
+
+            padding: 16px 38px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            background: #333;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: 500;
+
             cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
         }
 
+        #drawButton:hover {
+            background: #555;
+
+            transform: translateY(-2px);
+        }
+
+        #drawButton:active {
+            transform: translateY(0);
+        }
+
+        #drawButton:disabled {
+
+            background: #aaa;
+
+            cursor: default;
+
+            transform: none;
+        }
+
+
+        /* =========================
+           결과 영역
+        ========================= */
 
         #result {
-            margin-top: 40px;
+
+            margin-top: 50px;
+
+            min-height: 500px;
         }
 
 
-        #number {
-            font-size: 30px;
-            margin-bottom: 20px;
-        }
+        /* =========================
+           카운트다운
+        ========================= */
 
+        #countdown {
 
-        #cardImage {
             display: none;
 
-            max-width: 400px;
+            height: 500px;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 100px;
+
+            font-weight: 600;
+
+            color: #333;
+
+            animation: countdownFade 1s ease;
+        }
+
+
+        @keyframes countdownFade {
+
+            0% {
+                opacity: 0;
+                transform: scale(1.3);
+            }
+
+            30% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            70% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+
+        /* =========================
+           카드 결과
+        ========================= */
+
+        #cardResult {
+
+            display: none;
+
+            opacity: 0;
+
+            transform: translateY(10px);
+
+            transition:
+                opacity 0.5s ease,
+                transform 0.5s ease;
+        }
+
+
+        #cardResult.show {
+
+            opacity: 1;
+
+            transform: translateY(0);
+        }
+
+
+        /* =========================
+           카드 이미지
+        ========================= */
+
+        #cardImage {
+
+            display: block;
+
+            width: auto;
+
+            max-width: 100%;
+
             max-height: 500px;
 
-            margin: 20px auto;
+            margin: 0 auto 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
+
+        /* =========================
+           카드 텍스트
+        ========================= */
 
         #cardText {
+
+            max-width: 600px;
+
+            margin: 0 auto;
+
             font-size: 20px;
 
-            line-height: 1.6;
+            line-height: 1.8;
 
-            margin-top: 20px;
+            letter-spacing: -0.3px;
+
+            word-break: keep-all;
         }
 
 
-        #errorMessage {
-            color: red;
+        /* =========================
+           오류 메시지
+        ========================= */
 
-            margin-top: 20px;
+        #errorMessage {
+
+            margin-top: 30px;
+
+            color: #d33;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           모바일
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 40px 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            #countdown {
+                font-size: 80px;
+            }
+
+            #cardImage {
+                max-height: 420px;
+            }
+
+            #cardText {
+                font-size: 17px;
+            }
         }
 
     </style>
@@ -70,8 +283,9 @@
 <body>
 
 
-    <h1>타로 랜덤 카드</h1>
+<div class="container">
 
+    <h1>타로 랜덤 카드</h1>
 
     <button id="drawButton">
         카드 뽑기
@@ -80,76 +294,72 @@
 
     <div id="result">
 
-
-        <div id="number"></div>
-
-
-        <img
-            id="cardImage"
-            src=""
-            alt="타로 카드"
-        >
+        <!-- 카운트다운 -->
+        <div id="countdown">
+            <span id="countdownNumber"></span>
+        </div>
 
 
-        <div id="cardText"></div>
+        <!-- 카드 결과 -->
+        <div id="cardResult">
+
+            <img
+                id="cardImage"
+                src=""
+                alt="타로 카드"
+            >
+
+            <div id="cardText"></div>
+
+        </div>
 
 
+        <!-- 오류 메시지 -->
         <div id="errorMessage"></div>
 
-
     </div>
+
+</div>
 
 
 
 <script>
 
 
-// ==================================================
-// GitHub TXT 주소
-// ==================================================
+/* =====================================================
+   데이터 파일
+===================================================== */
 
 const IMAGE_DATA_URL =
     "https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt";
-
 
 const TEXT_DATA_URL =
     "https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
 
 
-
-// ==================================================
-// 이미지 / 텍스트 배열
-// ==================================================
+/* =====================================================
+   배열
+===================================================== */
 
 let images = [];
 
 let texts = [];
 
 
-
-// ==================================================
-// Google Drive 주소를 이미지 주소로 변환
-// ==================================================
+/* =====================================================
+   Google Drive URL 변환
+===================================================== */
 
 function convertGoogleDriveUrl(url) {
 
     url = url.trim();
 
-
-    // Google Drive 주소에서 파일 ID 찾기
-
     const match =
         url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-
-    // 파일 ID를 찾은 경우
 
     if (match) {
 
         const fileId = match[1];
-
-
-        // Google Drive 이미지 주소
 
         return (
             "https://drive.google.com/thumbnail" +
@@ -157,29 +367,19 @@ function convertGoogleDriveUrl(url) {
             fileId +
             "&sz=w1000"
         );
-
     }
 
-
-    // Google Drive 주소가 아니면
-    // 원래 주소 사용
-
     return url;
-
 }
 
 
-
-// ==================================================
-// TXT 파일 불러오기
-// ==================================================
+/* =====================================================
+   데이터 불러오기
+===================================================== */
 
 async function loadData() {
 
     try {
-
-
-        // 이미지와 텍스트를 동시에 가져오기
 
         const [
             imageResponse,
@@ -192,9 +392,6 @@ async function loadData() {
 
         ]);
 
-
-
-        // HTTP 오류 확인
 
         if (!imageResponse.ok) {
 
@@ -214,21 +411,14 @@ async function loadData() {
         }
 
 
-
-        // TXT 내용 가져오기
-
         const imageData =
             await imageResponse.text();
-
 
         const textData =
             await textResponse.text();
 
 
-
-        // ==================================================
-        // 이미지 배열
-        // ==================================================
+        /* 이미지 배열 */
 
         images = imageData
 
@@ -243,10 +433,7 @@ async function loadData() {
             );
 
 
-
-        // ==================================================
-        // 텍스트 배열
-        // ==================================================
+        /* 텍스트 배열 */
 
         texts = textData
 
@@ -257,16 +444,10 @@ async function loadData() {
             .filter(line => line !== "");
 
 
-
-        // ==================================================
-        // 데이터 확인
-        // ==================================================
-
         console.log(
             "이미지 개수:",
             images.length
         );
-
 
         console.log(
             "텍스트 개수:",
@@ -274,24 +455,12 @@ async function loadData() {
         );
 
 
-        console.log(
-            "이미지 배열:",
-            images
-        );
+        /* 개수 확인 */
 
-
-        console.log(
-            "텍스트 배열:",
-            texts
-        );
-
-
-
-        // ==================================================
-        // 이미지와 텍스트 개수 확인
-        // ==================================================
-
-        if (images.length !== texts.length) {
+        if (
+            images.length !==
+            texts.length
+        ) {
 
             throw new Error(
 
@@ -306,20 +475,26 @@ async function loadData() {
                 "개"
 
             );
-
         }
-
 
 
         console.log(
             "카드 데이터 로딩 완료!"
         );
 
-    }
+
+        /*
+         * 미리 이미지 캐시
+         *
+         * 첫 카드부터 이미지가 늦게 뜨는 것을
+         * 줄이기 위해 모든 이미지를 브라우저에
+         * 미리 로딩해 둡니다.
+         */
+
+        preloadAllImages();
 
 
-    catch (error) {
-
+    } catch (error) {
 
         console.error(
             "데이터 로딩 오류:",
@@ -327,25 +502,80 @@ async function loadData() {
         );
 
 
-        document.getElementById(
-            "errorMessage"
-        ).textContent =
-            error.message;
-
+        document
+            .getElementById("errorMessage")
+            .textContent =
+                error.message;
     }
+}
+
+
+
+/* =====================================================
+   모든 이미지 미리 로딩
+===================================================== */
+
+function preloadAllImages() {
+
+    images.forEach(url => {
+
+        const img =
+            new Image();
+
+        img.src = url;
+
+    });
 
 }
 
 
 
-// ==================================================
-// 카드 뽑기
-// ==================================================
+/* =====================================================
+   선택한 이미지 하나를 미리 로딩
+===================================================== */
 
-function drawCard() {
+function preloadImage(url) {
+
+    return new Promise((resolve, reject) => {
+
+        const img =
+            new Image();
 
 
-    // 데이터가 없는 경우
+        img.onload = function() {
+
+            resolve(img);
+
+        };
+
+
+        img.onerror = function() {
+
+            reject(
+                new Error(
+                    "이미지를 불러오지 못했습니다."
+                )
+            );
+
+        };
+
+
+        img.src = url;
+
+    });
+
+}
+
+
+
+/* =====================================================
+   카드 뽑기
+===================================================== */
+
+async function drawCard() {
+
+
+    /* 데이터가 없는 경우 */
 
     if (
         images.length === 0 ||
@@ -357,115 +587,305 @@ function drawCard() {
         );
 
         return;
-
     }
 
 
+    /* 배열 개수 확인 */
 
-    // ==================================================
-    // 이미지와 텍스트 개수 확인
-    // ==================================================
-
-    if (images.length !== texts.length) {
+    if (
+        images.length !==
+        texts.length
+    ) {
 
         alert(
             "이미지와 텍스트의 개수가 일치하지 않습니다."
         );
 
         return;
-
     }
 
 
+    /* 버튼 비활성화 */
 
-    // ==================================================
-    // 등록된 카드 개수만큼 랜덤 선택
-    // ==================================================
+    const button =
+        document.getElementById(
+            "drawButton"
+        );
+
+    button.disabled = true;
+
+
+    /* 기존 오류 제거 */
+
+    document
+        .getElementById("errorMessage")
+        .textContent = "";
+
+
+    /* 기존 카드 숨기기 */
+
+    const cardResult =
+        document.getElementById(
+            "cardResult"
+        );
+
+    cardResult.classList.remove("show");
+
+    cardResult.style.display = "none";
+
+
+    /* =================================================
+       랜덤 카드 결정
+    ================================================= */
 
     const randomIndex =
-
         Math.floor(
-            Math.random() * images.length
+            Math.random() *
+            images.length
         );
 
 
-
-    console.log(
-        "랜덤 배열 번호:",
-        randomIndex
-    );
-
-
-
-    // ==================================================
-    // 같은 배열 번호의 이미지와 텍스트 가져오기
-    // ==================================================
-
     const selectedImage =
         images[randomIndex];
-
 
     const selectedText =
         texts[randomIndex];
 
 
-
-    // ==================================================
-    // 배열 번호 표시
-    // ==================================================
-
-    document.getElementById(
-        "number"
-    ).textContent =
-
-        "배열 번호 : " +
-        randomIndex;
+    console.log(
+        "선택된 카드 배열 번호:",
+        randomIndex
+    );
 
 
+    console.log(
+        "선택된 이미지:",
+        selectedImage
+    );
 
-    // ==================================================
-    // 이미지 표시
-    // ==================================================
+
+    console.log(
+        "선택된 텍스트:",
+        selectedText
+    );
+
+
+
+    /* =================================================
+       카운트다운 시작
+    ================================================= */
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+    const countdownNumber =
+        document.getElementById(
+            "countdownNumber"
+        );
+
+
+    countdown.style.display =
+        "flex";
+
+
+    /* =================================================
+       이미지 미리 로딩 시작
+
+       ★ 중요 ★
+
+       5초 카운트다운과 동시에
+       이미지 로딩을 시작합니다.
+    ================================================= */
+
+    const imagePromise =
+        preloadImage(
+            selectedImage
+        );
+
+
+
+    /* =================================================
+       5 → 4 → 3 → 2 → 1
+    ================================================= */
+
+    for (
+        let number = 5;
+        number >= 1;
+        number--
+    ) {
+
+
+        countdownNumber.textContent =
+            number;
+
+
+        /*
+         * 숫자가 바뀔 때마다
+         * 애니메이션을 다시 실행
+         */
+
+        countdownNumber.style.animation =
+            "none";
+
+
+        /*
+         * 브라우저가 스타일을
+         * 다시 계산하도록 함
+         */
+
+        void countdownNumber.offsetWidth;
+
+
+        countdownNumber.style.animation =
+            "countdownFade 1s ease";
+
+
+        /*
+         * 1초 기다림
+         */
+
+        await wait(1000);
+
+    }
+
+
+
+    /* =================================================
+       카운트다운 종료
+    ================================================= */
+
+    countdown.style.display =
+        "none";
+
+
+
+    /* =================================================
+       이미지 로딩 완료까지 기다림
+
+       5초 안에 이미지가 이미 로딩됐다면
+       바로 진행됩니다.
+
+       아직 로딩 중이라면 이미지가 준비될
+       때까지 기다립니다.
+    ================================================= */
+
+    try {
+
+        await imagePromise;
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        document
+            .getElementById(
+                "errorMessage"
+            )
+            .textContent =
+                "이미지를 불러오지 못했습니다. Google Drive 공유 설정을 확인해주세요.";
+
+
+        button.disabled = false;
+
+        return;
+    }
+
+
+
+    /* =================================================
+       이미지와 텍스트를 동시에 준비
+    ================================================= */
 
     const cardImage =
         document.getElementById(
             "cardImage"
         );
 
+    const cardText =
+        document.getElementById(
+            "cardText"
+        );
+
+
+    /*
+     * 이미 로딩이 끝난 이미지 URL을
+     * 실제 화면에 적용
+     */
 
     cardImage.src =
         selectedImage;
 
 
-    cardImage.style.display =
-        "block";
+    /*
+     * 텍스트도 동시에 적용
+     */
 
-
-
-    // ==================================================
-    // 텍스트 표시
-    // ==================================================
-
-    document.getElementById(
-        "cardText"
-    ).textContent =
+    cardText.textContent =
         selectedText;
 
 
 
-    // 에러 메시지 제거
+    /* =================================================
+       카드 표시
+    ================================================= */
 
-    document.getElementById(
-        "errorMessage"
-    ).textContent = "";
+    cardResult.style.display =
+        "block";
+
+
+    /*
+     * 브라우저가 이미지와 텍스트를
+     * DOM에 반영한 다음 동시에 나타나도록
+     * 한 프레임 기다림
+     */
+
+    requestAnimationFrame(() => {
+
+        requestAnimationFrame(() => {
+
+            cardResult.classList.add(
+                "show"
+            );
+
+        });
+
+    });
+
+
+    /* 버튼 다시 활성화 */
+
+    button.disabled = false;
 
 }
 
 
 
-// ==================================================
-// 이미지 로딩 실패 확인
-// ==================================================
+/* =====================================================
+   시간 기다리기
+===================================================== */
+
+function wait(milliseconds) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
+}
+
+
+
+/* =====================================================
+   이미지 오류 처리
+===================================================== */
 
 document
     .getElementById("cardImage")
@@ -479,21 +899,21 @@ document
             );
 
 
-            document.getElementById(
-                "errorMessage"
-            ).textContent =
-
-                "이미지를 불러오지 못했습니다. " +
-                "Google Drive의 공유 설정을 확인해주세요.";
+            document
+                .getElementById(
+                    "errorMessage"
+                )
+                .textContent =
+                    "이미지를 불러오지 못했습니다. Google Drive의 공유 설정을 확인해주세요.";
 
         }
     );
 
 
 
-// ==================================================
-// 카드 뽑기 버튼
-// ==================================================
+/* =====================================================
+   버튼 이벤트
+===================================================== */
 
 document
     .getElementById("drawButton")
@@ -504,16 +924,14 @@ document
 
 
 
-// ==================================================
-// 페이지가 열리면 데이터 불러오기
-// ==================================================
+/* =====================================================
+   페이지 시작
+===================================================== */
 
 loadData();
 
 
 </script>
 
-
 </body>
-
 </html>
