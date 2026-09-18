@@ -1,236 +1,851 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>카드가 건네는 메세지</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:center;background:#f7f3ee;color:#333}
-.container{width:100%;max-width:700px;margin:0 auto;padding:60px 20px}
-#topMenu{transition:opacity .8s ease}
-#topMenu.hidden{display:none}
-h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
-#startButton,#messageButton{padding:16px 38px;border:0;border-radius:50px;background:#333;color:#fff;font-size:18px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
-#startButton:hover,#messageButton:hover{background:#555;transform:translateY(-2px)}
-#startButton:active,#messageButton:active{transform:translateY(0)}
-#startButton:disabled,#messageButton:disabled{background:#aaa;cursor:default;transform:none}
-#intro{display:none;min-height:500px;align-items:center;justify-content:center;flex-direction:column}
-#introText{font-size:28px;line-height:1.7;letter-spacing:-.5px;word-break:keep-all;opacity:0;transform:translateY(5px);transition:opacity .8s ease,transform .8s ease}
-#introText.show{opacity:1;transform:translateY(0)}
-#messageButton{display:none;margin-top:35px;opacity:0;transform:translateY(5px);transition:opacity 1s ease,transform 1s ease}
-#messageButton.show{opacity:1;transform:translateY(0)}
-#result{margin-top:50px;min-height:500px}
-#countdown{display:none;height:500px;align-items:center;justify-content:center;font-size:90px;font-weight:400;color:#333}
-#countdownNumber{display:block;animation:countdownFade 1s ease}
-@keyframes countdownFade{0%{opacity:0;transform:scale(1.2)}25%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
-#cardResult{display:none;opacity:0;transform:translateY(15px);transition:opacity 1s ease,transform 1s ease}
-#cardResult.show{opacity:1;transform:translateY(0)}
-#cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 30px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.15)}
-#cardText{max-width:600px;margin:0 auto;font-size:20px;line-height:1.8;letter-spacing:-.3px;word-break:keep-all}
-#commentSection{max-width:600px;margin:55px auto 0;padding-top:35px;border-top:1px solid rgba(0,0,0,.1)}
-#commentMessage{margin:0 0 20px;font-size:15px;line-height:1.7;color:#777;word-break:keep-all}
-#commentBox{display:flex;gap:10px;width:100%}
-#commentInput{flex:1;min-width:0;height:48px;padding:0 16px;border:1px solid #ddd;border-radius:10px;background:#fff;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
-#commentInput:focus{border-color:#999;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
-#commentButton{flex-shrink:0;height:48px;padding:0 20px;border:0;border-radius:10px;background:#333;color:#fff;font-size:15px;cursor:pointer;transition:background .2s,transform .2s}
-#commentButton:hover{background:#555}
-#commentButton:active{transform:translateY(1px)}
-#commentButton:disabled{background:#aaa;cursor:default}
-#savedMessage{display:none;margin-top:15px;font-size:14px;color:#777}
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    text-align:center;
+    background:#f7f3ee;
+    color:#333
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:0 auto;
+    padding:60px 20px
+}
+
+#topMenu{
+    transition:opacity .8s ease
+}
+
+#topMenu.hidden{
+    display:none
+}
+
+h1{
+    margin:0 0 30px;
+    font-size:36px;
+    font-weight:600;
+    letter-spacing:-1px
+}
+
+#startButton,
+#messageButton{
+    padding:16px 38px;
+    border:0;
+    border-radius:50px;
+    background:#333;
+    color:#fff;
+    font-size:18px;
+    font-weight:500;
+    cursor:pointer;
+    transition:transform .2s,background .2s
+}
+
+#startButton:hover,
+#messageButton:hover{
+    background:#555;
+    transform:translateY(-2px)
+}
+
+#startButton:active,
+#messageButton:active{
+    transform:translateY(0)
+}
+
+#startButton:disabled,
+#messageButton:disabled{
+    background:#aaa;
+    cursor:default;
+    transform:none
+}
+
+#intro{
+    display:none;
+    min-height:500px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column
+}
+
+/* 안내 문구
+   위아래 이동 없이 페이드인/페이드아웃만 적용 */
+#introText{
+    font-size:28px;
+    line-height:1.7;
+    letter-spacing:-.5px;
+    word-break:keep-all;
+    opacity:0;
+    transition:opacity .8s ease
+}
+
+#introText.show{
+    opacity:1
+}
+
+/* 메세지 받기 버튼
+   글씨 아래에서 살짝 올라오며 부드럽게 등장 */
+#messageButton{
+    display:none;
+    margin-top:35px;
+    opacity:0;
+    transform:translateY(12px);
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease
+}
+
+#messageButton.show{
+    opacity:1;
+    transform:translateY(0)
+}
+
+#result{
+    margin-top:50px;
+    min-height:500px
+}
+
+#countdown{
+    display:none;
+    height:500px;
+    align-items:center;
+    justify-content:center;
+    font-size:90px;
+    font-weight:400;
+    color:#333
+}
+
+#countdownNumber{
+    display:block;
+    animation:countdownFade 1s ease
+}
+
+@keyframes countdownFade{
+    0%{
+        opacity:0;
+        transform:scale(1.2)
+    }
+
+    25%{
+        opacity:1;
+        transform:scale(1)
+    }
+
+    70%{
+        opacity:1;
+        transform:scale(1)
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(.95)
+    }
+}
+
+#cardResult{
+    display:none;
+    opacity:0;
+    transform:translateY(15px);
+    transition:
+        opacity 1s ease,
+        transform 1s ease
+}
+
+#cardResult.show{
+    opacity:1;
+    transform:translateY(0)
+}
+
+#cardImage{
+    display:block;
+    width:auto;
+    max-width:100%;
+    max-height:500px;
+    margin:0 auto 30px;
+    border-radius:12px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15)
+}
+
+#cardText{
+    max-width:600px;
+    margin:0 auto;
+    font-size:20px;
+    line-height:1.8;
+    letter-spacing:-.3px;
+    word-break:keep-all
+}
+
+#commentSection{
+    max-width:600px;
+    margin:55px auto 0;
+    padding-top:35px;
+    border-top:1px solid rgba(0,0,0,.1)
+}
+
+#commentMessage{
+    margin:0 0 20px;
+    font-size:15px;
+    line-height:1.7;
+    color:#777;
+    word-break:keep-all
+}
+
+#commentBox{
+    display:flex;
+    gap:10px;
+    width:100%
+}
+
+#commentInput{
+    flex:1;
+    min-width:0;
+    height:48px;
+    padding:0 16px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+    font-size:15px;
+    outline:none;
+    transition:
+        border-color .2s,
+        box-shadow .2s
+}
+
+#commentInput:focus{
+    border-color:#999;
+    box-shadow:0 0 0 3px rgba(0,0,0,.05)
+}
+
+#commentButton{
+    flex-shrink:0;
+    height:48px;
+    padding:0 20px;
+    border:0;
+    border-radius:10px;
+    background:#333;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    transition:
+        background .2s,
+        transform .2s
+}
+
+#commentButton:hover{
+    background:#555
+}
+
+#commentButton:active{
+    transform:translateY(1px)
+}
+
+#commentButton:disabled{
+    background:#aaa;
+    cursor:default
+}
+
+#savedMessage{
+    display:none;
+    margin-top:15px;
+    font-size:14px;
+    color:#777
+}
+
 @media(max-width:600px){
-.container{padding:40px 15px}
-h1{font-size:28px}
-#introText{font-size:23px}
-#countdown{font-size:70px}
-#cardImage{max-height:420px}
-#cardText{font-size:17px}
-#commentSection{margin-top:45px;padding-top:30px}
-#commentMessage{font-size:14px}
-#commentBox{gap:7px}
-#commentInput{font-size:14px;padding:0 12px}
-#commentButton{padding:0 15px;font-size:14px}
+
+    .container{
+        padding:40px 15px
+    }
+
+    h1{
+        font-size:28px
+    }
+
+    #introText{
+        font-size:23px
+    }
+
+    #countdown{
+        font-size:70px
+    }
+
+    #cardImage{
+        max-height:420px
+    }
+
+    #cardText{
+        font-size:17px
+    }
+
+    #commentSection{
+        margin-top:45px;
+        padding-top:30px
+    }
+
+    #commentMessage{
+        font-size:14px
+    }
+
+    #commentBox{
+        gap:7px
+    }
+
+    #commentInput{
+        font-size:14px;
+        padding:0 12px
+    }
+
+    #commentButton{
+        padding:0 15px;
+        font-size:14px
+    }
 }
 </style>
 </head>
+
 <body>
+
 <div class="container">
-<div id="topMenu">
-<h1>카드가 건네는 메세지</h1>
-<button id="startButton">시작 하기</button>
+
+    <div id="topMenu">
+        <h1>카드가 건네는 메세지</h1>
+        <button id="startButton">시작 하기</button>
+    </div>
+
+
+    <div id="intro">
+
+        <div id="introText"></div>
+
+        <button id="messageButton">
+            메세지 받기
+        </button>
+
+    </div>
+
+
+    <div id="result">
+
+        <div id="countdown">
+            <span id="countdownNumber"></span>
+        </div>
+
+
+        <div id="cardResult">
+
+            <img
+                id="cardImage"
+                src=""
+                alt="타로 카드"
+            >
+
+            <div id="cardText"></div>
+
+
+            <div id="commentSection">
+
+                <p id="commentMessage">
+                    도움이 되셨나요?<br>
+                    느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.
+                </p>
+
+                <div id="commentBox">
+
+                    <input
+                        type="text"
+                        id="commentInput"
+                        placeholder="느낀점을 남겨주세요"
+                        maxlength="500"
+                    >
+
+                    <button
+                        id="commentButton"
+                        type="button"
+                    >
+                        등록
+                    </button>
+
+                </div>
+
+                <div id="savedMessage">
+                    저장되었습니다.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div id="intro">
-<div id="introText"></div>
-<button id="messageButton">메세지 받기</button>
-</div>
-
-<div id="result">
-<div id="countdown"><span id="countdownNumber"></span></div>
-
-<div id="cardResult">
-<img id="cardImage" src="" alt="타로 카드">
-<div id="cardText"></div>
-
-<div id="commentSection">
-<p id="commentMessage">도움이 되셨나요?<br>느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.</p>
-<div id="commentBox">
-<input type="text" id="commentInput" placeholder="느낀점을 남겨주세요" maxlength="500">
-<button id="commentButton" type="button">등록</button>
-</div>
-<div id="savedMessage">저장되었습니다.</div>
-</div>
-</div>
-</div>
-</div>
 
 <script>
-const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt",TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt",GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
-let images=[],texts=[];
+
+const IMAGE_DATA_URL =
+"https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt";
+
+const TEXT_DATA_URL =
+"https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
+
+const GOOGLE_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
+
+
+let images=[];
+let texts=[];
+
+
 const $=id=>document.getElementById(id);
 
+
+/* Google Drive 이미지 주소 변환 */
 function convertGoogleDriveUrl(url){
-const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
-return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
+
+    const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+    return m
+        ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`
+        : url.trim();
 }
 
+
+/* 이미지 / 텍스트 데이터 불러오기 */
 async function loadData(){
-try{
-const[i,t]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
-if(!i.ok||!t.ok)throw Error("데이터 로딩 실패");
-images=(await i.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(convertGoogleDriveUrl);
-texts=(await t.text()).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-if(images.length!==texts.length)return console.error("이미지와 텍스트 개수가 다릅니다.");
-images.forEach(url=>{const img=new Image();img.src=url});
-}catch(e){console.error("데이터 로딩 오류:",e)}
+
+    try{
+
+        const[i,t]=await Promise.all([
+            fetch(IMAGE_DATA_URL),
+            fetch(TEXT_DATA_URL)
+        ]);
+
+        if(!i.ok||!t.ok){
+            throw Error("데이터 로딩 실패");
+        }
+
+        images=(await i.text())
+            .split(/\r?\n/)
+            .map(x=>x.trim())
+            .filter(Boolean)
+            .map(convertGoogleDriveUrl);
+
+        texts=(await t.text())
+            .split(/\r?\n/)
+            .map(x=>x.trim())
+            .filter(Boolean);
+
+
+        if(images.length!==texts.length){
+            return console.error(
+                "이미지와 텍스트 개수가 다릅니다."
+            );
+        }
+
+
+        /* 이미지 미리 로딩 */
+        images.forEach(url=>{
+
+            const img=new Image();
+
+            img.src=url;
+
+        });
+
+
+    }catch(e){
+
+        console.error(
+            "데이터 로딩 오류:",
+            e
+        );
+
+    }
 }
 
+
+/* 이미지 미리 불러오기 */
 function preloadImage(url){
-return new Promise((resolve,reject)=>{
-const img=new Image();
-img.onload=()=>resolve(img);
-img.onerror=reject;
-img.src=url
-})
+
+    return new Promise((resolve,reject)=>{
+
+        const img=new Image();
+
+        img.onload=()=>resolve(img);
+
+        img.onerror=reject;
+
+        img.src=url;
+
+    });
+
 }
 
+
+/* 안내 문구 표시 */
 function showIntro(message,duration){
-return new Promise(resolve=>{
-const text=$("introText");
-text.classList.remove("show");
-setTimeout(()=>{
-text.textContent=message;
-text.classList.add("show");
-setTimeout(()=>{
-text.classList.remove("show");
-setTimeout(resolve,800);
-},duration);
-},800);
-})
+
+    return new Promise(resolve=>{
+
+        const text=$("introText");
+
+        /* 기존 문구를 먼저 부드럽게 숨김 */
+        text.classList.remove("show");
+
+
+        setTimeout(()=>{
+
+            text.textContent=message;
+
+            text.classList.add("show");
+
+
+            setTimeout(()=>{
+
+                text.classList.remove("show");
+
+
+                setTimeout(resolve,800);
+
+            },duration);
+
+
+        },800);
+
+    });
+
 }
 
+
+/* 시작 */
 async function startExperience(){
+
     $("topMenu").classList.add("hidden");
+
     $("intro").style.display="flex";
 
-    // 첫 번째 문장
-    await showIntro("카드로 알고 싶은 것을, 마음속에 떠올려보세요.",5000);
+
+    /*
+     첫 번째 문장
+     5초 동안 표시
+    */
+    await showIntro(
+        "카드로 알고 싶은 것을, 마음속에 떠올려보세요.",
+        5000
+    );
+
 
     const text=$("introText");
     const button=$("messageButton");
 
-    text.classList.remove("show");
 
-    // 첫 번째 문장이 사라진 후 두 번째 문장 등장
+    /*
+     혹시 버튼을 다시 눌렀을 경우를 대비해
+     버튼 상태 초기화
+    */
+    button.classList.remove("show");
+    button.style.display="none";
+
+
+    /*
+     첫 번째 문장이 사라진 후
+     두 번째 문장 표시
+    */
     setTimeout(()=>{
-        text.textContent="준비되셨다면, 천천히 메시지를 받아보세요.";
+
+        text.textContent=
+            "준비되셨다면, 천천히 메시지를 받아보세요.";
+
         text.classList.add("show");
 
-        // 두 번째 문장이 3초간 유지된 후 버튼 등장
+
+        /*
+         두 번째 문장을 3초 동안 보여준 후
+         버튼을 부드럽게 등장시킴
+        */
         setTimeout(()=>{
+
             button.style.display="block";
-            requestAnimationFrame(()=>button.classList.add("show"));
+
+
+            /*
+             브라우저가 display:block 상태를
+             먼저 적용한 다음 애니메이션 시작
+            */
+            requestAnimationFrame(()=>{
+
+                requestAnimationFrame(()=>{
+
+                    button.classList.add("show");
+
+                });
+
+            });
+
+
         },3000);
 
+
     },800);
+
 }
 
+
+/* 카드 뽑기 */
 async function drawCard(){
-if(!images.length||!texts.length||images.length!==texts.length)return;
 
-const button=$("messageButton"),cardResult=$("cardResult"),input=$("commentInput");
-button.disabled=true;
-cardResult.classList.remove("show");
-cardResult.style.display="none";
-input.value="";
-$("savedMessage").style.display="none";
+    if(
+        !images.length||
+        !texts.length||
+        images.length!==texts.length
+    ){
+        return;
+    }
 
-const i=Math.floor(Math.random()*images.length),image=images[i],text=texts[i];
-const imagePromise=preloadImage(image);
-const countdown=$("countdown"),number=$("countdownNumber");
 
-$("intro").style.display="none";
-countdown.style.display="flex";
+    const button=$("messageButton");
+    const cardResult=$("cardResult");
+    const input=$("commentInput");
 
-for(let n=5;n>=1;n--){
-number.textContent=n;
-number.style.animation="none";
-void number.offsetWidth;
-number.style.animation="countdownFade 1s ease";
-await wait(1000);
+
+    button.disabled=true;
+
+
+    cardResult.classList.remove("show");
+
+    cardResult.style.display="none";
+
+
+    input.value="";
+
+    $("savedMessage").style.display="none";
+
+
+    /* 랜덤 카드 선택 */
+    const i=Math.floor(
+        Math.random()*images.length
+    );
+
+    const image=images[i];
+
+    const text=texts[i];
+
+
+    /* 이미지 미리 로딩 */
+    const imagePromise=preloadImage(image);
+
+
+    const countdown=$("countdown");
+    const number=$("countdownNumber");
+
+
+    $("intro").style.display="none";
+
+    countdown.style.display="flex";
+
+
+    /* 5 → 4 → 3 → 2 → 1 */
+    for(let n=5;n>=1;n--){
+
+        number.textContent=n;
+
+        number.style.animation="none";
+
+        void number.offsetWidth;
+
+        number.style.animation=
+            "countdownFade 1s ease";
+
+        await wait(1000);
+
+    }
+
+
+    countdown.style.display="none";
+
+
+    /* 이미지 로딩 확인 */
+    try{
+
+        await imagePromise;
+
+    }catch(e){
+
+        console.error(
+            "이미지를 불러오지 못했습니다.",
+            e
+        );
+
+        button.disabled=false;
+
+        return;
+
+    }
+
+
+    $("cardImage").src=image;
+
+    $("cardText").textContent=text;
+
+
+    cardResult.style.display="block";
+
+
+    /* 카드 결과 부드럽게 등장 */
+    requestAnimationFrame(()=>{
+
+        requestAnimationFrame(()=>{
+
+            cardResult.classList.add("show");
+
+        });
+
+    });
+
+
+    button.disabled=false;
+
 }
 
-countdown.style.display="none";
 
-try{
-await imagePromise
-}catch(e){
-console.error("이미지를 불러오지 못했습니다.",e);
-button.disabled=false;
-return
-}
-
-$("cardImage").src=image;
-$("cardText").textContent=text;
-cardResult.style.display="block";
-
-requestAnimationFrame(()=>requestAnimationFrame(()=>cardResult.classList.add("show")));
-button.disabled=false
-}
-
+/* 댓글 등록 */
 async function submitComment(){
-const input=$("commentInput"),button=$("commentButton"),saved=$("savedMessage"),comment=input.value.trim();
-if(!comment)return input.focus();
-button.disabled=true;
 
-try{
-await fetch(GOOGLE_SCRIPT_URL,{
-method:"POST",
-mode:"no-cors",
-headers:{"Content-Type":"application/x-www-form-urlencoded"},
-body:"comment="+encodeURIComponent(comment)
-});
-input.value="";
-saved.style.display="block";
-}catch(e){
-console.error("댓글 저장 오류:",e)
-}finally{
-button.disabled=false
-}
+    const input=$("commentInput");
+
+    const button=$("commentButton");
+
+    const saved=$("savedMessage");
+
+    const comment=input.value.trim();
+
+
+    if(!comment){
+
+        return input.focus();
+
+    }
+
+
+    button.disabled=true;
+
+
+    try{
+
+        await fetch(
+            GOOGLE_SCRIPT_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                headers:{
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body:
+                    "comment="+
+                    encodeURIComponent(comment)
+            }
+        );
+
+
+        input.value="";
+
+        saved.style.display="block";
+
+
+    }catch(e){
+
+        console.error(
+            "댓글 저장 오류:",
+            e
+        );
+
+    }finally{
+
+        button.disabled=false;
+
+    }
+
 }
 
+
+/* 시간 대기 */
 function wait(ms){
-return new Promise(r=>setTimeout(r,ms))
+
+    return new Promise(
+        r=>setTimeout(r,ms)
+    );
+
 }
 
-$("startButton").addEventListener("click",startExperience);
-$("messageButton").addEventListener("click",drawCard);
-$("commentButton").addEventListener("click",submitComment);
-$("commentInput").addEventListener("keydown",e=>{
-if(e.key==="Enter")submitComment()
-});
-$("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
+
+/* 이벤트 */
+$("startButton")
+    .addEventListener(
+        "click",
+        startExperience
+    );
+
+
+$("messageButton")
+    .addEventListener(
+        "click",
+        drawCard
+    );
+
+
+$("commentButton")
+    .addEventListener(
+        "click",
+        submitComment
+    );
+
+
+$("commentInput")
+    .addEventListener(
+        "keydown",
+        e=>{
+
+            if(e.key==="Enter"){
+                submitComment();
+            }
+
+        }
+    );
+
+
+$("cardImage")
+    .addEventListener(
+        "error",
+        e=>{
+
+            console.error(
+                "이미지 불러오기 실패:",
+                e.target.src
+            );
+
+        }
+    );
+
+
+/* 데이터 로딩 */
 loadData();
+
 </script>
+
 </body>
 </html>
+```
