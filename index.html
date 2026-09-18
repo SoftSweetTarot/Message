@@ -272,6 +272,152 @@
 
 
         /* =========================
+           댓글 영역
+        ========================= */
+
+        #commentSection {
+
+            max-width: 600px;
+
+            margin: 55px auto 0;
+
+            padding-top: 35px;
+
+            border-top:
+                1px solid
+                rgba(0, 0, 0, 0.1);
+        }
+
+
+        #commentMessage {
+
+            margin: 0 0 20px;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            color: #777;
+
+            word-break: keep-all;
+        }
+
+
+        #commentBox {
+
+            display: flex;
+
+            gap: 10px;
+
+            width: 100%;
+        }
+
+
+        #commentInput {
+
+            flex: 1;
+
+            min-width: 0;
+
+            height: 48px;
+
+            padding: 0 16px;
+
+            border:
+                1px solid
+                #ddd;
+
+            border-radius: 10px;
+
+            background: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        #commentInput:focus {
+
+            border-color: #999;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        #commentButton {
+
+            flex-shrink: 0;
+
+            height: 48px;
+
+            padding: 0 20px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #333;
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        #commentButton:hover {
+
+            background: #555;
+
+        }
+
+
+        #commentButton:active {
+
+            transform: translateY(1px);
+
+        }
+
+
+        #commentButton:disabled {
+
+            background: #aaa;
+
+            cursor: default;
+
+        }
+
+
+        /* =========================
+           저장 완료 메시지
+        ========================= */
+
+        #savedMessage {
+
+            display: none;
+
+            margin-top: 15px;
+
+            font-size: 14px;
+
+            color: #777;
+
+        }
+
+
+        /* =========================
            모바일
         ========================= */
 
@@ -304,6 +450,42 @@
             #cardText {
 
                 font-size: 17px;
+            }
+
+
+            #commentSection {
+
+                margin-top: 45px;
+
+                padding-top: 30px;
+            }
+
+
+            #commentMessage {
+
+                font-size: 14px;
+            }
+
+
+            #commentBox {
+
+                gap: 7px;
+            }
+
+
+            #commentInput {
+
+                font-size: 14px;
+
+                padding: 0 12px;
+            }
+
+
+            #commentButton {
+
+                padding: 0 15px;
+
+                font-size: 14px;
             }
 
         }
@@ -362,6 +544,50 @@
             <div id="cardText"></div>
 
 
+
+            <!-- =========================
+                 댓글 영역
+            ========================== -->
+
+            <div id="commentSection">
+
+
+                <p id="commentMessage">
+                    도움이 되셨나요?<br>
+                    느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.
+                </p>
+
+
+                <div id="commentBox">
+
+
+                    <input
+                        type="text"
+                        id="commentInput"
+                        placeholder="느낀점을 남겨주세요"
+                        maxlength="500"
+                    >
+
+
+                    <button
+                        id="commentButton"
+                        type="button"
+                    >
+                        등록
+                    </button>
+
+
+                </div>
+
+
+                <div id="savedMessage">
+                    저장되었습니다.
+                </div>
+
+
+            </div>
+
+
         </div>
 
 
@@ -385,6 +611,15 @@ const IMAGE_DATA_URL =
 
 const TEXT_DATA_URL =
     "https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt";
+
+
+
+/* =====================================================
+   Google Apps Script 주소
+===================================================== */
+
+const GOOGLE_SCRIPT_URL =
+    "여기에_Apps_Script_웹앱_주소를_넣으세요";
 
 
 
@@ -553,13 +788,6 @@ async function loadData() {
 
     } catch (error) {
 
-        /*
-         * 오류를 콘솔에만 표시합니다.
-         *
-         * 화면에는 오류 문구를
-         * 표시하지 않습니다.
-         */
-
         console.error(
             "데이터 로딩 오류:",
             error
@@ -658,11 +886,6 @@ async function drawCard() {
         texts.length === 0
     ) {
 
-        /*
-         * 사용자에게 오류 문구를
-         * 보여주지 않고 콘솔에만 기록
-         */
-
         console.error(
             "카드 데이터를 불러오지 못했습니다."
         );
@@ -721,6 +944,30 @@ async function drawCard() {
 
 
     /* =========================
+       댓글 입력창 초기화
+    ========================= */
+
+    const commentInput =
+        document.getElementById(
+            "commentInput"
+        );
+
+
+    const savedMessage =
+        document.getElementById(
+            "savedMessage"
+        );
+
+
+    commentInput.value = "";
+
+
+    savedMessage.style.display =
+        "none";
+
+
+
+    /* =========================
        랜덤 카드 선택
     ========================= */
 
@@ -739,11 +986,6 @@ async function drawCard() {
         texts[randomIndex];
 
 
-
-    /*
-     * 배열 번호는 화면에 표시하지 않습니다.
-     * 개발자 콘솔에서만 확인할 수 있습니다.
-     */
 
     console.log(
         "선택된 카드:",
@@ -800,10 +1042,6 @@ async function drawCard() {
 
 
 
-        /*
-         * 애니메이션 초기화
-         */
-
         countdownNumber.style.animation =
             "none";
 
@@ -817,10 +1055,6 @@ async function drawCard() {
             "countdownFade 1s ease";
 
 
-
-        /*
-         * 1초 대기
-         */
 
         await wait(1000);
 
@@ -846,11 +1080,6 @@ async function drawCard() {
         await imagePromise;
 
     } catch (error) {
-
-        /*
-         * 오류 메시지를 화면에 표시하지 않습니다.
-         * 콘솔에서만 확인할 수 있습니다.
-         */
 
         console.error(
             "이미지를 불러오지 못했습니다.",
@@ -902,11 +1131,6 @@ async function drawCard() {
 
 
 
-    /*
-     * 이미지와 텍스트가
-     * 동시에 자연스럽게 나타남
-     */
-
     requestAnimationFrame(() => {
 
 
@@ -931,6 +1155,123 @@ async function drawCard() {
 
     button.disabled =
         false;
+
+}
+
+
+
+/* =====================================================
+   댓글 저장
+===================================================== */
+
+async function submitComment() {
+
+
+    const input =
+        document.getElementById(
+            "commentInput"
+        );
+
+
+    const button =
+        document.getElementById(
+            "commentButton"
+        );
+
+
+    const savedMessage =
+        document.getElementById(
+            "savedMessage"
+        );
+
+
+    const comment =
+        input.value.trim();
+
+
+
+    /* =========================
+       빈 댓글 방지
+    ========================= */
+
+    if (comment === "") {
+
+        input.focus();
+
+        return;
+    }
+
+
+
+    /* =========================
+       버튼 잠시 비활성화
+    ========================= */
+
+    button.disabled =
+        true;
+
+
+
+    try {
+
+
+        /*
+         * Google Apps Script로
+         * 댓글 전송
+         */
+
+        await fetch(
+            GOOGLE_SCRIPT_URL,
+            {
+
+                method: "POST",
+
+                mode: "no-cors",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+
+                },
+
+                body:
+                    "comment=" +
+                    encodeURIComponent(
+                        comment
+                    )
+
+            }
+        );
+
+
+
+        /*
+         * 저장 완료 메시지
+         */
+
+        input.value = "";
+
+        savedMessage.style.display =
+            "block";
+
+
+    } catch (error) {
+
+
+        console.error(
+            "댓글 저장 오류:",
+            error
+        );
+
+
+    } finally {
+
+
+        button.disabled =
+            false;
+
+    }
 
 }
 
@@ -962,12 +1303,6 @@ function wait(milliseconds) {
    이미지 오류
 ===================================================== */
 
-/*
- * 이미지 오류가 발생해도
- * 화면에는 아무런 오류 문구를
- * 표시하지 않습니다.
- */
-
 document
     .getElementById("cardImage")
     .addEventListener(
@@ -985,7 +1320,7 @@ document
 
 
 /* =====================================================
-   버튼 이벤트
+   카드 뽑기 버튼
 ===================================================== */
 
 document
@@ -993,6 +1328,42 @@ document
     .addEventListener(
         "click",
         drawCard
+    );
+
+
+
+/* =====================================================
+   댓글 등록 버튼
+===================================================== */
+
+document
+    .getElementById("commentButton")
+    .addEventListener(
+        "click",
+        submitComment
+    );
+
+
+
+/* =====================================================
+   Enter 키로 댓글 등록
+===================================================== */
+
+document
+    .getElementById("commentInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                submitComment();
+
+            }
+
+        }
     );
 
 
