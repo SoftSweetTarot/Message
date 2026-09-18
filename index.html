@@ -27,19 +27,19 @@ h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px;text-shado
 #introText.show{opacity:1}
 #messageButton{display:none;margin-top:35px;opacity:0;transform:translateY(12px);transition:opacity 1.2s ease,transform 1.2s ease}
 #messageButton.show{opacity:1;transform:translateY(0)}
-#result{margin-top:50px;min-height:500px}
-#countdown{display:none;height:500px;align-items:center;justify-content:center;font-size:90px;font-weight:400;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.6)}
+#result{margin-top:30px;min-height:400px}
+#countdown{display:none;height:400px;align-items:center;justify-content:center;font-size:90px;font-weight:400;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.6)}
 #countdownNumber{display:block;animation:countdownFade 1s ease}
 @keyframes countdownFade{0%{opacity:0;transform:scale(1.2)}25%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.95)}}
 #cardResult{display:none;opacity:0;transform:translateY(15px);transition:opacity 1s ease,transform 1s ease}
 #cardResult.show{opacity:1;transform:translateY(0)}
-#cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 30px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.4)}
+#cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 20px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.4)}
 #cardText{max-width:600px;margin:0 auto;font-size:20px;line-height:1.8;letter-spacing:-.3px;word-break:keep-all;text-shadow:0 1px 5px rgba(0,0,0,.3)}
-#commentSection{max-width:600px;margin:55px auto 0;padding-top:30px;border-top:1px solid rgba(255,255,255,.2);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity 1.2s ease,transform 1.2s ease}
+#commentSection{max-width:600px;margin:25px auto 0;padding-top:15px;border-top:1px dashed rgba(255,255,255,.3);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity 1.2s ease,transform 1.2s ease}
 #commentSection.show{opacity:1;transform:translateY(0);pointer-events:auto}
-#commentToggle{border:0;background:none;color:rgba(255,255,255,.8);font-size:15px;cursor:pointer;padding:8px 15px}
-#commentForm{display:none;margin-top:15px}
-#commentMessage{margin:0 0 20px;font-size:15px;line-height:1.7;color:rgba(255,255,255,.8);word-break:keep-all}
+#commentToggle{border:0;background:none;color:rgba(255,255,255,.8);font-size:15px;cursor:pointer;padding:4px 15px}
+#commentForm{display:none;margin-top:12px}
+#commentMessage{margin:0 0 15px;font-size:15px;line-height:1.6;color:rgba(255,255,255,.8);word-break:keep-all}
 #commentMessage small{display:block;margin-top:4px;font-size:13px;color:rgba(255,255,255,.6)}
 #commentBox{display:flex;gap:10px;width:100%}
 #commentInput{flex:1;min-width:0;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.3);border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font-size:15px;outline:none;backdrop-filter:blur(5px);transition:border-color .2s,box-shadow .2s}
@@ -49,20 +49,20 @@ h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px;text-shado
 #commentButton:hover{background:rgba(255,255,255,.9)}
 #commentButton:active{transform:translateY(1px)}
 #commentButton:disabled{background:rgba(255,255,255,.4);color:rgba(255,255,255,.7);cursor:default}
-#savedMessage{display:none;margin-top:15px;font-size:14px;color:rgba(255,255,255,.8)}
+#savedMessage{display:none;margin-top:12px;font-size:14px;color:rgba(255,255,255,.8)}
 @media(max-width:600px){
-.container{padding:40px 15px}
+.container{padding:25px 15px}
 h1{font-size:28px}
 #notice{font-size:13px}
 #introText{font-size:23px}
-#countdown{font-size:70px}
-#cardImage{max-height:420px}
-#cardText{font-size:17px}
-#commentSection{margin-top:45px;padding-top:25px}
+#countdown{font-size:70px;height:350px}
+#cardImage{max-height:350px;margin-bottom:15px}
+#cardText{font-size:16px;line-height:1.6}
+#commentSection{margin-top:20px;padding-top:12px}
 #commentMessage{font-size:14px}
 #commentBox{gap:7px}
-#commentInput{font-size:14px;padding:0 12px}
-#commentButton{padding:0 15px;font-size:14px}
+#commentInput{font-size:14px;padding:0 12px;height:44px}
+#commentButton{padding:0 15px;font-size:14px;height:44px}
 }
 </style>
 </head>
