@@ -11,6 +11,7 @@ body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:c
 #topMenu{transition:opacity .8s ease}
 #topMenu.hidden{display:none}
 h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
+#notice{margin:-10px 0 30px;font-size:14px;color:#888;letter-spacing:-.3px}
 #startButton,#messageButton{padding:16px 38px;border:0;border-radius:50px;background:#333;color:#fff;font-size:18px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
 #startButton:hover,#messageButton:hover{background:#555;transform:translateY(-2px)}
 #startButton:active,#messageButton:active{transform:translateY(0)}
@@ -45,6 +46,7 @@ h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
 @media(max-width:600px){
 .container{padding:40px 15px}
 h1{font-size:28px}
+#notice{font-size:13px}
 #introText{font-size:23px}
 #countdown{font-size:70px}
 #cardImage{max-height:420px}
@@ -59,8 +61,15 @@ h1{font-size:28px}
 </head>
 <body>
 <div class="container">
-<div id="topMenu"><h1>카드가 건네는 메시지</h1><button id="startButton">시작 하기</button></div>
-<div id="intro"><div id="introText"></div><button id="messageButton">메시지 받기</button></div>
+<div id="topMenu">
+<h1>카드가 건네는 메시지</h1>
+<p id="notice">한 번의 질문, 한 번의 메시지만 효력</p>
+<button id="startButton">시작하기</button>
+</div>
+<div id="intro">
+<div id="introText"></div>
+<button id="messageButton">메시지 받기</button>
+</div>
 <div id="result">
 <div id="countdown"><span id="countdownNumber"></span></div>
 <div id="cardResult">
@@ -70,7 +79,10 @@ h1{font-size:28px}
 <button id="commentToggle" type="button">한마디 남기기</button>
 <div id="commentForm">
 <p id="commentMessage">도움이 되셨나요?<br>느낀점이나 건의사항이 있으시면 남겨주세요.</p>
-<div id="commentBox"><input type="text" id="commentInput" placeholder="댓글은 말랑달콤 타로만 볼 수 있습니다." maxlength="500"><button id="commentButton" type="button">등록</button></div>
+<div id="commentBox">
+<input type="text" id="commentInput" placeholder="댓글은 말랑달콤 타로만 볼 수 있습니다." maxlength="500">
+<button id="commentButton" type="button">등록</button>
+</div>
 <div id="savedMessage">저장되었습니다.</div>
 </div>
 </div>
