@@ -8,13 +8,18 @@
 *{box-sizing:border-box}
 body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:center;background:#f7f3ee;color:#333}
 .container{width:100%;max-width:700px;margin:0 auto;padding:60px 20px}
-#topMenu{transition:opacity .3s ease}
+#topMenu{transition:opacity .5s ease}
 #topMenu.hidden{display:none}
 h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
-#drawButton{padding:16px 38px;border:0;border-radius:50px;background:#333;color:#fff;font-size:18px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
-#drawButton:hover{background:#555;transform:translateY(-2px)}
-#drawButton:active{transform:translateY(0)}
-#drawButton:disabled{background:#aaa;cursor:default;transform:none}
+#startButton,#drawButton{padding:16px 38px;border:0;border-radius:50px;background:#333;color:#fff;font-size:18px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s}
+#startButton:hover,#drawButton:hover{background:#555;transform:translateY(-2px)}
+#startButton:active,#drawButton:active{transform:translateY(0)}
+#startButton:disabled,#drawButton:disabled{background:#aaa;cursor:default;transform:none}
+#intro{display:none;min-height:500px;align-items:center;justify-content:center;flex-direction:column}
+#introText{font-size:28px;line-height:1.7;letter-spacing:-.5px;word-break:keep-all;opacity:0;transition:opacity .7s ease}
+#introText.show{opacity:1}
+#messageButton{display:none;margin-top:35px;opacity:0;transition:opacity .8s ease}
+#messageButton.show{opacity:1}
 #result{margin-top:50px;min-height:500px}
 #countdown{display:none;height:500px;align-items:center;justify-content:center;font-size:100px;font-weight:600;color:#333}
 #countdownNumber{display:block;animation:countdownFade 1s ease}
@@ -33,36 +38,53 @@ h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px}
 #commentButton:active{transform:translateY(1px)}
 #commentButton:disabled{background:#aaa;cursor:default}
 #savedMessage{display:none;margin-top:15px;font-size:14px;color:#777}
-@media(max-width:600px){.container{padding:40px 15px}h1{font-size:28px}#countdown{font-size:80px}#cardImage{max-height:420px}#cardText{font-size:17px}#commentSection{margin-top:45px;padding-top:30px}#commentMessage{font-size:14px}#commentBox{gap:7px}#commentInput{font-size:14px;padding:0 12px}#commentButton{padding:0 15px;font-size:14px}}
+@media(max-width:600px){.container{padding:40px 15px}h1{font-size:28px}#introText{font-size:23px}#countdown{font-size:80px}#cardImage{max-height:420px}#cardText{font-size:17px}#commentSection{margin-top:45px;padding-top:30px}#commentMessage{font-size:14px}#commentBox{gap:7px}#commentInput{font-size:14px;padding:0 12px}#commentButton{padding:0 15px;font-size:14px}}
 </style>
 </head>
 <body>
 <div class="container">
+
 <div id="topMenu">
 <h1>카드가 건네는 메세지</h1>
-<button id="drawButton">시작 하기</button>
+<button id="startButton">시작 하기</button>
 </div>
+
+<div id="intro">
+<div id="introText"></div>
+<button id="messageButton">메세지 받기</button>
+</div>
+
 <div id="result">
 <div id="countdown"><span id="countdownNumber"></span></div>
+
 <div id="cardResult">
 <img id="cardImage" src="" alt="타로 카드">
 <div id="cardText"></div>
+
 <div id="commentSection">
 <p id="commentMessage">도움이 되셨나요?<br>느낀점을 남겨주시면, 사이트 발전에 도움이 됩니다.</p>
+
 <div id="commentBox">
 <input type="text" id="commentInput" placeholder="느낀점을 남겨주세요" maxlength="500">
 <button id="commentButton" type="button">등록</button>
 </div>
+
 <div id="savedMessage">저장되었습니다.</div>
 </div>
 </div>
 </div>
 </div>
+
 <script>
 const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt",TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt",GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
 let images=[],texts=[];
 const $=id=>document.getElementById(id);
-function convertGoogleDriveUrl(url){const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()}
+
+function convertGoogleDriveUrl(url){
+const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
+return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
+}
+
 async function loadData(){
 try{
 const[i,t]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
@@ -73,20 +95,66 @@ if(images.length!==texts.length)return console.error("이미지와 텍스트 개
 images.forEach(url=>{const img=new Image();img.src=url});
 }catch(e){console.error("데이터 로딩 오류:",e)}
 }
-function preloadImage(url){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=url})}
+
+function preloadImage(url){
+return new Promise((resolve,reject)=>{
+const img=new Image();
+img.onload=()=>resolve(img);
+img.onerror=reject;
+img.src=url
+})
+}
+
+async function startExperience(){
+$("topMenu").classList.add("hidden");
+$("intro").style.display="flex";
+
+const text=$("introText");
+const button=$("messageButton");
+
+await showIntro("고민을 떠 올려보세요.",2000);
+await showIntro("떠 올리셨나요?",2000);
+await showIntro("준비되셨으면, 버튼을 누르세요.",1000);
+
+button.style.display="block";
+requestAnimationFrame(()=>button.classList.add("show"));
+}
+
+function showIntro(message,duration){
+return new Promise(resolve=>{
+const text=$("introText");
+text.classList.remove("show");
+
+setTimeout(()=>{
+text.textContent=message;
+text.classList.add("show");
+
+setTimeout(()=>{
+text.classList.remove("show");
+setTimeout(resolve,700);
+},duration);
+},500);
+})
+}
+
 async function drawCard(){
 if(!images.length||!texts.length||images.length!==texts.length)return;
-$("topMenu").classList.add("hidden");
-const button=$("drawButton"),cardResult=$("cardResult"),input=$("commentInput");
+
+const button=$("messageButton"),cardResult=$("cardResult"),input=$("commentInput");
+
 button.disabled=true;
 cardResult.classList.remove("show");
 cardResult.style.display="none";
 input.value="";
 $("savedMessage").style.display="none";
+
 const i=Math.floor(Math.random()*images.length),image=images[i],text=texts[i];
 const imagePromise=preloadImage(image);
 const countdown=$("countdown"),number=$("countdownNumber");
+
+$("intro").style.display="none";
 countdown.style.display="flex";
+
 for(let n=5;n>=1;n--){
 number.textContent=n;
 number.style.animation="none";
@@ -94,30 +162,59 @@ void number.offsetWidth;
 number.style.animation="countdownFade 1s ease";
 await wait(1000);
 }
+
 countdown.style.display="none";
-try{await imagePromise}catch(e){console.error("이미지를 불러오지 못했습니다.",e);button.disabled=false;return}
+
+try{
+await imagePromise
+}catch(e){
+console.error("이미지를 불러오지 못했습니다.",e);
+button.disabled=false;
+return
+}
+
 $("cardImage").src=image;
 $("cardText").textContent=text;
 cardResult.style.display="block";
+
 requestAnimationFrame(()=>requestAnimationFrame(()=>cardResult.classList.add("show")));
-button.disabled=false;
+
+button.disabled=false
 }
+
 async function submitComment(){
 const input=$("commentInput"),button=$("commentButton"),saved=$("savedMessage"),comment=input.value.trim();
 if(!comment)return input.focus();
 button.disabled=true;
+
 try{
-await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"comment="+encodeURIComponent(comment)});
+await fetch(GOOGLE_SCRIPT_URL,{
+method:"POST",
+mode:"no-cors",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"comment="+encodeURIComponent(comment)
+});
 input.value="";
 saved.style.display="block";
-}catch(e){console.error("댓글 저장 오류:",e)}
-finally{button.disabled=false}
+}catch(e){
+console.error("댓글 저장 오류:",e)
+}finally{
+button.disabled=false
 }
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-$("drawButton").addEventListener("click",drawCard);
+}
+
+function wait(ms){
+return new Promise(r=>setTimeout(r,ms))
+}
+
+$("startButton").addEventListener("click",startExperience);
+$("messageButton").addEventListener("click",drawCard);
 $("commentButton").addEventListener("click",submitComment);
-$("commentInput").addEventListener("keydown",e=>{if(e.key==="Enter")submitComment()});
+$("commentInput").addEventListener("keydown",e=>{
+if(e.key==="Enter")submitComment()
+});
 $("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
+
 loadData();
 </script>
 </body>
