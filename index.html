@@ -133,18 +133,20 @@ async function startExperience(){
     $("topMenu").classList.add("hidden");
     $("intro").style.display="flex";
 
-    await showIntro("지금, 마음속에 있는 고민을 떠올려보세요.",3000);
-    await showIntro("고민이 마음에 떠오르셨나요?",3000);
+    // 첫 번째 문장
+    await showIntro("지금, 마음속에 있는 고민을 떠올려보세요.",5000);
 
     const text=$("introText");
     const button=$("messageButton");
 
     text.classList.remove("show");
 
+    // 첫 번째 문장이 사라진 후 두 번째 문장 등장
     setTimeout(()=>{
         text.textContent="준비되셨다면, 천천히 메시지를 받아보세요.";
         text.classList.add("show");
 
+        // 두 번째 문장이 3초간 유지된 후 버튼 등장
         setTimeout(()=>{
             button.style.display="block";
             requestAnimationFrame(()=>button.classList.add("show"));
