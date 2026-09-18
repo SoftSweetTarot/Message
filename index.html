@@ -81,12 +81,10 @@ h1{font-size:28px}
 const IMAGE_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/images.txt",TEXT_DATA_URL="https://raw.githubusercontent.com/softsweettarot/Message/main/texts.txt",GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbw_Ka3rztRHsOMR30u8u5_tzObwHgZitSEtGXRIQCyBxEHeYw2C71N31gLyqMGDa88N/exec";
 let images=[],texts=[];
 const $=id=>document.getElementById(id);
-
 function convertGoogleDriveUrl(url){
 const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
 return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
 }
-
 async function loadData(){
 try{
 const[i,t]=await Promise.all([fetch(IMAGE_DATA_URL),fetch(TEXT_DATA_URL)]);
@@ -97,7 +95,6 @@ if(images.length!==texts.length)return console.error("이미지와 텍스트 개
 images.forEach(url=>{const img=new Image();img.src=url});
 }catch(e){console.error("데이터 로딩 오류:",e)}
 }
-
 function preloadImage(url){
 return new Promise((resolve,reject)=>{
 const img=new Image();
@@ -106,7 +103,6 @@ img.onerror=reject;
 img.src=url
 })
 }
-
 function showIntro(message,duration){
 return new Promise(resolve=>{
 const text=$("introText");
@@ -121,7 +117,6 @@ setTimeout(resolve,800);
 },800);
 })
 }
-
 async function startExperience(){
 $("topMenu").classList.add("hidden");
 $("intro").style.display="flex";
@@ -134,11 +129,10 @@ text.textContent="준비되셨다면, 버튼을 눌러 메시지를 받아보세
 text.classList.add("show");
 setTimeout(()=>{
 button.style.display="block";
-requestAnimationFrame(()=>requestAnimationFrame(()=>button.classList.add("show")));
+requestAnimationFrame(()=>button.classList.add("show"));
 },3000);
 },800);
 }
-
 async function drawCard(){
 if(!images.length||!texts.length||images.length!==texts.length)return;
 const button=$("messageButton"),cardResult=$("cardResult"),input=$("commentInput"),commentSection=$("commentSection");
@@ -179,7 +173,6 @@ commentSection.classList.add("show");
 }));
 button.disabled=false
 }
-
 async function submitComment(){
 const input=$("commentInput"),button=$("commentButton"),saved=$("savedMessage"),comment=input.value.trim();
 if(!comment)return input.focus();
@@ -195,13 +188,10 @@ finally{
 button.disabled=false
 }
 }
-
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-
 $("startButton").addEventListener("click",startExperience);
 $("messageButton").addEventListener("click",drawCard);
 $("commentButton").addEventListener("click",submitComment);
-
 $("commentToggle").addEventListener("click",()=>{
 const form=$("commentForm"),button=$("commentToggle");
 if(form.style.display==="block"){
@@ -213,11 +203,9 @@ button.textContent="댓글 닫기";
 $("commentInput").focus()
 }
 });
-
 $("commentInput").addEventListener("keydown",e=>{
 if(e.key==="Enter")submitComment()
 });
-
 $("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
 loadData();
 </script>
