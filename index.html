@@ -16,7 +16,7 @@ body{margin:0;padding:0;font-family:Arial,"Noto Sans KR",sans-serif;text-align:c
 .container{position:relative;z-index:1;width:100%;max-width:700px;margin:0 auto;padding:60px 20px}
 #topMenu{transition:opacity .8s ease}
 #topMenu.hidden{display:none}
-#logo{display:block;width:auto;max-width:280px;height:auto;max-height:150px;margin:0 auto 25px;border-radius:20px;box-shadow:0 8px 25px rgba(0,0,0,.25)}
+#logo{display:block;width:auto;height:auto;max-width:none;margin:0 auto 25px;border-radius:20px;box-shadow:0 8px 25px rgba(0,0,0,.25)}
 h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px;text-shadow:0 2px 10px rgba(0,0,0,.3)}
 #notice{margin:-10px 0 30px;font-size:14px;color:rgba(255,255,255,.7);letter-spacing:-.3px}
 #startButton,#messageButton{padding:16px 38px;border:0;border-radius:50px;background:rgba(255,255,255,.9);color:#1e1035;font-size:18px;font-weight:600;cursor:pointer;backdrop-filter:blur(5px);box-shadow:0 4px 15px rgba(0,0,0,.2);transition:transform .2s,background .2s,box-shadow .2s}
@@ -53,7 +53,7 @@ h1{margin:0 0 30px;font-size:36px;font-weight:600;letter-spacing:-1px;text-shado
 #savedMessage{display:none;margin-top:12px;font-size:14px;color:rgba(255,255,255,.8)}
 @media(max-width:600px){
 .container{padding:25px 15px}
-#logo{width:min(72vw,220px);max-height:120px;margin-bottom:20px;border-radius:16px}
+#logo{max-width:90vw;margin-bottom:20px;border-radius:16px}
 h1{font-size:28px}
 #notice{font-size:13px}
 #introText{font-size:23px}
@@ -111,6 +111,29 @@ const $=id=>document.getElementById(id);
 function convertGoogleDriveUrl(url){
 const m=url.trim().match(/\/d\/([a-zA-Z0-9_-]+)/);
 return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000`:url.trim()
+}
+function setLogoSize(){
+const logo=$("logo");
+if(!logo.naturalWidth)return;
+const originalWidth=logo.naturalWidth;
+const originalHeight=logo.naturalHeight;
+const scale=.5;
+let width=originalWidth*scale;
+let height=originalHeight*scale;
+const maxWidth=window.innerWidth<=600?window.innerWidth*.9:originalWidth*.5;
+if(width>maxWidth){
+const ratio=maxWidth/width;
+width=maxWidth;
+height*=ratio;
+}
+logo.style.width=width+"px";
+logo.style.height=height+"px";
+}
+$("logo").addEventListener("load",setLogoSize);
+window.addEventListener("resize",setLogoSize);
+function loadLogo(){
+const logo=$("logo");
+if(logo.complete&&logo.naturalWidth)setLogoSize();
 }
 async function loadData(){
 try{
@@ -234,6 +257,7 @@ $("commentInput").addEventListener("keydown",e=>{
 if(e.key==="Enter")submitComment()
 });
 $("cardImage").addEventListener("error",e=>console.error("이미지 불러오기 실패:",e.target.src));
+loadLogo();
 loadData();
 </script>
 </body>
