@@ -20,12 +20,12 @@
     #topMenu{transition:opacity .8s ease}
     #topMenu.hidden{display:none}
 
-    /* 로고 이미지 스타일 (화면 밖 방지 처리) */
+    /* 로고 이미지 스타일 (PC 기준 확대 및 반응형 처리) */
     #mainLogo {
       display: block;
       width: 100%;
-      max-width: 180px; /* 로고의 최대 너비 지정 */
-      height: auto;     /* 비율 유지 */
+      max-width: 280px;    /* PC용 로고 크기 확대 (기존 180px -> 280px) */
+      height: auto;        /* 비율 유지 */
       margin: 0 auto 20px; /* 중앙 정렬 및 아래쪽 여백 */
     }
 
@@ -47,7 +47,7 @@
     #cardResult{display:none;opacity:0;transform:translateY(15px);transition:opacity 1s ease,transform 1s ease}
     #cardResult.show{opacity:1;transform:translateY(0)}
     
-    /* 타로 카드 이미지 (스마트폰 화면 너비에 맞게 조절) */
+    /* 타로 카드 이미지 */
     #cardImage{display:block;width:auto;max-width:100%;max-height:500px;margin:0 auto 20px;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.4)}
     
     #cardText{max-width:600px;margin:0 auto;font-size:20px;line-height:1.8;letter-spacing:-.3px;word-break:keep-all;text-shadow:0 1px 5px rgba(0,0,0,.3)}
@@ -70,7 +70,7 @@
     /* 모바일 대응 (media query) */
     @media(max-width:600px){
       .container{padding:25px 15px}
-      #mainLogo{max-width:140px;margin-bottom:15px} /* 스마트폰 화면용 로고 크기 조정 */
+      #mainLogo{max-width:180px;margin-bottom:15px} /* 모바일용 로고 크기 최적화 */
       h1{font-size:28px}
       #notice{font-size:13px}
       #introText{font-size:23px}
@@ -94,7 +94,7 @@
   
   <div class="container">
     <div id="topMenu">
-      <!-- "카드가 건네는 메시지" 바로 위에 로고 이미지 배치 -->
+      <!-- 지정해주신 구글 드라이브 이미지 URL 적용 -->
       <img src="https://lh3.googleusercontent.com/d/1eXmzHgbzdgkjtbqsGnU-5Wzm0FfrOO3J" alt="로고" id="mainLogo">
       <h1>카드가 건네는 메시지</h1>
       <p id="notice">마음속 질문 하나에, 한 번의 메시지만 효력</p>
