@@ -91,7 +91,7 @@ h1{font-size:28px}
 <img id="cardImage" src="" alt="타로 카드">
 <div id="cardText"></div>
 <div id="commentSection">
-<button id="commentToggle" type="button">한마디 메뉴열기</button>
+<button id="commentToggle" type="button">말랑달콤 타로에게 한마디 남기기</button>
 <div id="commentForm">
 <p id="commentMessage">도움이 되셨나요?<br>느낀점이나 건의사항이 있으시면 남겨주세요.</p>
 <div id="commentBox">
@@ -246,10 +246,10 @@ $("commentToggle").addEventListener("click",()=>{
 const form=$("commentForm"),button=$("commentToggle");
 if(form.style.display==="block"){
 form.style.display="none";
-button.textContent="한마디 메뉴열기"
+button.textContent="말랑달콤 타로에게 한마디 창열기"
 }else{
 form.style.display="block";
-button.textContent="한마디 메뉴닫기";
+button.textContent="말랑달콤 타로에게 한마디 창닫기";
 $("commentInput").focus()
 }
 });
